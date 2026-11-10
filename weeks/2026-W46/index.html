@@ -228,6 +228,20 @@
     }
     .btn:hover { background: var(--cta-hover); }
     .btn:focus-visible { outline: 3px solid rgba(53,163,191,.45); outline-offset: 2px; }
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: wait;
+      box-shadow: none;
+    }
+    .send-error {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border: 1px solid #c45c4a;
+      background: #fdf4f2;
+      color: var(--charcoal);
+    }
+    .send-error p { margin: 0 0 10px; }
+    .send-error a.btn { text-decoration: none; }
     .btn-secondary {
       background: transparent;
       box-shadow: none;
@@ -440,6 +454,14 @@
         <button type="button" class="btn btn-secondary" id="start-over">Start over</button>
       </div>
     </section>
+
+    <div class="send-error" id="send-error" hidden>
+      <p id="send-error-text">We couldn’t send that just now. Your note is still here.</p>
+      <div class="actions" style="margin-top:4px">
+        <button type="button" class="btn" id="try-again-btn">Try again</button>
+        <a class="btn btn-secondary" id="mailto-fallback" href="mailto:brett@barrandcompany.co">Send by email instead</a>
+      </div>
+    </div>
   </main>
 
   <footer class="fine">First name and office only. Please do not include last names or client names.</footer>
@@ -448,7 +470,10 @@
   <script>
   (function () {
     const CONFIG = {
-      submitTarget: "mailto:brett@barrandcompany.co",
+      submitUrl: "https://api.web3forms.com/submit",
+      accessKey: "c6554a1b-e643-4614-bdd0-078c46598681",
+      fallbackMailto: "mailto:brett@barrandcompany.co",
+      fromName: "Sedona Weekly Signal",
       checkInDay: ""
     };
 
@@ -919,7 +944,7 @@
     }
     function subjectLine(payload) { return "Recruiter Signal - " + payload.name + " - " + payload.iso_week; }
     function mailtoUrl(payload) {
-      const addr = CONFIG.submitTarget.replace(/^mailto:/i, "");
+      const addr = (CONFIG.fallbackMailto || "mailto:brett@barrandcompany.co").replace(/^mailto:/i, "");
       return "mailto:" + addr + "?subject=" + encodeURIComponent(subjectLine(payload)) + "&body=" + encodeURIComponent(formatBody(payload));
     }
     async function copyText(text) {
@@ -940,6 +965,54 @@
       const hasTp = Object.keys(payload).some(function (k) { return /^tp\d+$/.test(k) && payload[k]; });
       return !!(payload.role_family || payload.friction || hasTp || payload.placement_story);
     }
+    function hideSendError() {
+      const box = $("send-error");
+      if (box) box.hidden = true;
+    }
+    function showSendError(payload, message) {
+      const box = $("send-error");
+      const text = $("send-error-text");
+      const link = $("mailto-fallback");
+      if (text) text.textContent = message || "We couldn’t send that just now. Your note is still here.";
+      if (link) link.href = mailtoUrl(payload);
+      if (box) {
+        box.hidden = false;
+        if (box.scrollIntoView) box.scrollIntoView({ block: "nearest" });
+      }
+    }
+    function setSending(on) {
+      ["send-btn", "try-again-btn", "copy-btn", "nothing-new", "nothing-new-2"].forEach(function (id) {
+        const el = $(id);
+        if (el) el.disabled = !!on;
+      });
+      const btn = $("send-btn");
+      if (btn) btn.textContent = on ? "Sending…" : "Send";
+    }
+    async function postToWeb3Forms(payload) {
+      const res = await fetch(CONFIG.submitUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          access_key: CONFIG.accessKey,
+          subject: subjectLine(payload),
+          from_name: CONFIG.fromName,
+          message: formatBody(payload),
+          name: payload.name || "",
+          office: payload.office || "",
+          mode: payload.mode || "",
+          week: payload.iso_week || ""
+        })
+      });
+      let json = null;
+      try { json = await res.json(); } catch (err) { json = null; }
+      if (!json || json.success !== true) {
+        const detail = (json && (json.message || (json.body && json.body.message))) || ("HTTP " + res.status);
+        throw new Error(detail);
+      }
+    }
     async function submitSignal(via) {
       if (!identityReady()) { toast("Add your first name and office first."); return; }
       const payload = buildPayload();
@@ -948,46 +1021,39 @@
         return;
       }
       const body = formatBody(payload);
-      const target = CONFIG.submitTarget;
-      if (via === "copy" || !/^mailto:/i.test(target)) {
-        if (!/^mailto:/i.test(target) && via !== "copy") {
-          try {
-            const res = await fetch(target, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-            if (!res.ok) throw new Error("HTTP " + res.status);
-          } catch (err) {
-            await copyText(body);
-            toast("Could not reach the server. Note copied instead.");
-            finishThanks();
-            return;
-          }
-          finishThanks();
-          return;
-        }
+      if (via === "copy") {
         const ok = await copyText(body);
         toast(ok ? "Copied." : "Could not copy automatically.");
-        if (via === "copy" && !$("view-thanks").classList.contains("active")) return;
+        if (!$("view-thanks").classList.contains("active")) return;
         finishThanks();
         return;
       }
-      const url = mailtoUrl(payload);
-      if (url.length > 1800) {
-        await copyText(body);
-        toast("The note is a bit long for an email link, so it was copied instead.");
-      } else {
-        window.location.href = url;
+      hideSendError();
+      setSending(true);
+      try {
+        await postToWeb3Forms(payload);
+        finishThanks();
+      } catch (err) {
+        showSendError(payload, "We couldn’t send that just now. Your note is still here.");
+        toast("Send failed. You can try again or send by email instead.");
+      } finally {
+        setSending(false);
       }
-      finishThanks();
     }
-    function finishThanks() { showView("thanks"); }
+    function finishThanks() {
+      hideSendError();
+      showView("thanks");
+    }
     function nothingNew() {
       if (!identityReady()) { toast("Add your first name and office first."); return; }
       state.type = "nothing-this-week";
-      submitSignal("mailto");
+      submitSignal("send");
     }
 
     $("nothing-new").addEventListener("click", nothingNew);
     $("nothing-new-2").addEventListener("click", nothingNew);
-    $("send-btn").addEventListener("click", function () { state.type = "weekly-pulse"; submitSignal("mailto"); });
+    $("send-btn").addEventListener("click", function () { state.type = "weekly-pulse"; submitSignal("send"); });
+    $("try-again-btn").addEventListener("click", function () { submitSignal("send"); });
     $("copy-btn").addEventListener("click", function () { state.type = "weekly-pulse"; submitSignal("copy"); });
     $("copy-again").addEventListener("click", function () { submitSignal("copy"); });
     $("start-over").addEventListener("click", function () { window.location = window.location.pathname; });
