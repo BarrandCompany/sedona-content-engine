@@ -242,6 +242,32 @@
     }
     .send-error p { margin: 0 0 10px; }
     .send-error a.btn { text-decoration: none; }
+    .cap-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(45, 46, 50, 0.62);
+    }
+    .cap-modal[hidden] { display: none !important; }
+    .cap-modal-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 28px 24px 24px;
+      box-shadow: 1px 1px 3px rgba(0,0,0,.25);
+    }
+    .cap-modal-card p {
+      margin: 0 0 20px;
+      font-size: 18px;
+      line-height: 1.5;
+      color: var(--charcoal);
+    }
     .btn-secondary {
       background: transparent;
       box-shadow: none;
@@ -466,6 +492,12 @@
 
   <footer class="fine">First name and office only. Please do not include last names or client names.</footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="cap-modal" id="cap-modal" hidden role="dialog" aria-modal="true" aria-describedby="cap-modal-text">
+    <div class="cap-modal-card">
+      <p id="cap-modal-text">Max submission cap limit reached, please disregard until the start of the next month.</p>
+      <button type="button" class="btn" id="cap-modal-close">OK</button>
+    </div>
+  </div>
 
   <script>
   (function () {
@@ -988,6 +1020,43 @@
       const btn = $("send-btn");
       if (btn) btn.textContent = on ? "Sending…" : "Send";
     }
+    function currentChicagoMonth() {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/Chicago",
+        year: "numeric",
+        month: "2-digit"
+      }).formatToParts(new Date());
+      const year = parts.find(function (item) { return item.type === "year"; }).value;
+      const month = parts.find(function (item) { return item.type === "month"; }).value;
+      return year + "-" + month;
+    }
+    async function readLimit() {
+      try {
+        const res = await fetch("./limit.json?ts=" + Date.now(), { cache: "no-store" });
+        if (!res.ok) return null;
+        return await res.json();
+      } catch (err) {
+        return null;
+      }
+    }
+    function limitBlocksSend(info) {
+      return !!(info && info.capped === true && String(info.month) === currentChicagoMonth());
+    }
+    function looksLikeQuotaError(err) {
+      const text = String((err && err.message) || err || "").toLowerCase();
+      return /monthly submission limit|submission limit|quota|over the limit|exceeded your (monthly )?limit|limit reached|cap limit/.test(text);
+    }
+    function showCapModal() {
+      const modal = $("cap-modal");
+      if (!modal) return;
+      modal.hidden = false;
+      const closer = $("cap-modal-close");
+      if (closer) closer.focus();
+    }
+    function hideCapModal() {
+      const modal = $("cap-modal");
+      if (modal) modal.hidden = true;
+    }
     async function postToWeb3Forms(payload) {
       const res = await fetch(CONFIG.submitUrl, {
         method: "POST",
@@ -1009,7 +1078,11 @@
       let json = null;
       try { json = await res.json(); } catch (err) { json = null; }
       if (!json || json.success !== true) {
-        const detail = (json && (json.message || (json.body && json.body.message))) || ("HTTP " + res.status);
+        const detail = (json && (
+          json.message ||
+          (json.body && json.body.message) ||
+          (json.error && json.error.message)
+        )) || ("HTTP " + res.status);
         throw new Error(detail);
       }
     }
@@ -1029,19 +1102,30 @@
         return;
       }
       hideSendError();
+      hideCapModal();
       setSending(true);
       try {
+        const info = await readLimit();
+        if (limitBlocksSend(info)) {
+          showCapModal();
+          return;
+        }
         await postToWeb3Forms(payload);
         finishThanks();
       } catch (err) {
-        showSendError(payload, "We couldn’t send that just now. Your note is still here.");
-        toast("Send failed. You can try again or send by email instead.");
+        if (looksLikeQuotaError(err)) {
+          showCapModal();
+        } else {
+          showSendError(payload, "We couldn’t send that just now. Your note is still here.");
+          toast("Send failed. You can try again or send by email instead.");
+        }
       } finally {
         setSending(false);
       }
     }
     function finishThanks() {
       hideSendError();
+      hideCapModal();
       showView("thanks");
     }
     function nothingNew() {
@@ -1054,6 +1138,10 @@
     $("nothing-new-2").addEventListener("click", nothingNew);
     $("send-btn").addEventListener("click", function () { state.type = "weekly-pulse"; submitSignal("send"); });
     $("try-again-btn").addEventListener("click", function () { submitSignal("send"); });
+    $("cap-modal-close").addEventListener("click", hideCapModal);
+    document.addEventListener("keydown", function (ev) {
+      if (ev.key === "Escape") hideCapModal();
+    });
     $("copy-btn").addEventListener("click", function () { state.type = "weekly-pulse"; submitSignal("copy"); });
     $("copy-again").addEventListener("click", function () { submitSignal("copy"); });
     $("start-over").addEventListener("click", function () { window.location = window.location.pathname; });
