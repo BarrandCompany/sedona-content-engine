@@ -108,7 +108,8 @@
       outline: 3px solid rgba(53,163,191,.35);
       border-color: #35A3BF;
     }
-    .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .mode-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    @media (max-width: 900px) { .mode-grid { grid-template-columns: 1fr; } }
     .mode-card {
       appearance: none;
       text-align: left;
@@ -116,8 +117,8 @@
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: 4px;
-      padding: 24px;
-      min-height: 160px;
+      padding: 20px 18px;
+      min-height: 148px;
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -368,9 +369,47 @@
     }
     .closed-banner p { margin: 0; }
     .closed-banner[hidden] { display: none !important; }
+
+    textarea.scenario { min-height: 320px; resize: vertical; }
+    .dictate-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 14px;
+      margin: 10px 0 0;
+    }
+    .mic-btn {
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--charcoal);
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: var(--pill);
+      cursor: pointer;
+    }
+    .mic-btn svg { width: 16px; height: 16px; fill: currentColor; }
+    .mic-btn.listening {
+      background: var(--cta);
+      border-color: var(--cta);
+    }
+    .mic-btn:focus-visible { outline: 3px solid rgba(53,163,191,.45); outline-offset: 2px; }
+    .dictate-hint { margin: 0; font-size: 14px; color: var(--body); }
+    .dictate-live {
+      margin: 8px 0 0;
+      min-height: 1.4em;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--teal-dark);
+    }
     @media (max-width: 700px) {
       .header-inner, .shell, footer.fine { padding-left: 20px; padding-right: 20px; }
-      .mode-grid, .id-grid { grid-template-columns: 1fr; }
+      .id-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -419,6 +458,10 @@
         <button type="button" class="mode-card" id="pick-guided">
           <h2>Guided</h2>
           <p>Three or four industry points. Add what you are seeing locally.</p>
+        </button>
+        <button type="button" class="mode-card" id="pick-scenario">
+          <h2>Scenario</h2>
+          <p>Describe a situation from this week, in detail. It may be turned into an animation.</p>
         </button>
       </div>
       <div class="actions">
@@ -490,6 +533,20 @@
             <button type="button" class="chip" data-consent="internal" data-scope="guided">Internal only</button>
           </div>
         </details>
+      </div>
+
+      <div id="scenario-form" hidden>
+        <p class="lede" id="scenario-instructions">Describe, in as much detail as possible, a scenario that happened this week. Who was involved, where it happened, what went wrong or right, and how it ended. This scenario may be turned into an animation.</p>
+        <label class="field" for="scenario">This week’s scenario</label>
+        <textarea class="scenario" id="scenario" maxlength="8000" placeholder="Who was involved, where it happened, what went wrong or right, and how it ended."></textarea>
+        <div class="dictate-row">
+          <button type="button" class="mic-btn" id="dictate-scenario" hidden aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg>
+            <span class="mic-label">Start dictation</span>
+          </button>
+          <p class="dictate-hint" id="scenario-mic-hint" hidden>You can also use the microphone on your keyboard.</p>
+        </div>
+        <p class="dictate-live" id="scenario-interim" aria-live="polite"></p>
       </div>
 
       <div class="actions">
@@ -733,7 +790,7 @@
       if (!windowClosed()) return false;
       const banner = $("closed-banner");
       if (banner) banner.hidden = false;
-      ["send-btn", "try-again-btn", "nothing-new", "nothing-new-2", "pick-open", "pick-guided"].forEach(function (id) {
+      ["send-btn", "try-again-btn", "nothing-new", "nothing-new-2", "pick-open", "pick-guided", "pick-scenario"].forEach(function (id) {
         const el = $(id);
         if (el) el.disabled = true;
       });
@@ -981,25 +1038,29 @@
     }
     function openMode(mode) {
       if (!identityReady()) { toast("Add your first name and office first."); return; }
-      state.mode = mode === "guided" ? "guided" : "open";
+      if (mode !== "guided" && mode !== "scenario") mode = "open";
+      state.mode = mode;
       $("open-form").hidden = state.mode !== "open";
       $("guided-form").hidden = state.mode !== "guided";
-      $("write-eyebrow").textContent = state.mode === "open" ? "Open note" : "Guided";
-      $("write-title").textContent = state.mode === "open" ? "What happened this week?" : "What's happening in your market?";
-      $("switch-mode").textContent = state.mode === "open" ? "Use guided prompts" : "Write a note instead";
+      $("scenario-form").hidden = state.mode !== "scenario";
+      $("write-eyebrow").textContent = state.mode === "open" ? "Open note" : (state.mode === "guided" ? "Guided" : "Scenario");
+      $("write-title").textContent = state.mode === "open" ? "What happened this week?" : (state.mode === "guided" ? "What's happening in your market?" : "Describe a scenario from this week");
+      $("switch-mode").textContent = "Choose a different mode";
       showView("write");
     }
 
     $("pick-open").addEventListener("click", function () { openMode("open"); });
     $("pick-guided").addEventListener("click", function () { openMode("guided"); });
-    $("switch-mode").addEventListener("click", function () {
-      openMode(state.mode === "open" ? "guided" : "open");
-    });
+    $("pick-scenario").addEventListener("click", function () { openMode("scenario"); });
+    $("switch-mode").addEventListener("click", function () { showView("choose"); });
 
     function winStory() {
-      return state.mode === "open" ? $("open-win-story").value.trim() : $("guided-win-story").value.trim();
+      if (state.mode === "open") return $("open-win-story").value.trim();
+      if (state.mode === "guided") return $("guided-win-story").value.trim();
+      return "";
     }
     function frictionOther() {
+      if (state.mode !== "open" && state.mode !== "guided") return "";
       return $(state.mode === "open" ? "open-friction-other" : "guided-friction-other").value.trim();
     }
 
@@ -1007,8 +1068,11 @@
       const stamp = chicagoStamp(new Date());
       const skip = state.type === "nothing-this-week";
       const open = state.mode === "open";
+      const guided = state.mode === "guided";
+      const scenario = state.mode === "scenario";
       const spark = QUESTIONS.find(function (q) { return q.id === state.spark_id; });
       const storyWin = winStory();
+      const scenarioText = skip || !scenario ? "" : $("scenario").value.trim();
       const payload = {
         schema: "recruiter-signal-v1",
         type: skip ? "nothing-this-week" : "weekly-pulse",
@@ -1017,22 +1081,23 @@
         submitted_at: stamp,
         name: firstName($("name").value),
         office: $("office").value,
-        story: skip || !open ? "" : $("story").value.trim(),
+        story: skip ? "" : (open ? $("story").value.trim() : scenarioText),
+        scenario: scenarioText,
         about: skip || !open ? "" : state.about,
         spark_id: skip || !open ? "" : (state.spark_id || ""),
         spark_prompt: skip || !open || !spark ? "" : spark.prompt,
-        role_family: skip || open ? "" : state.role_family,
-        role_other: skip || open ? "" : $("role-other").value.trim(),
-        friction: skip ? "" : state.friction,
-        friction_label: skip ? "" : (state.friction === "other" ? frictionOther() : state.friction_label),
-        friction_other: skip ? "" : frictionOther(),
-        heat: skip ? "" : state.heat,
-        talking_points_week: skip || open ? "" : ((WEEK_CONFIG && WEEK_CONFIG.week) || isoWeekId),
-        placement_win: skip ? "" : (storyWin ? "yes" : "no"),
-        placement_story: skip ? "" : storyWin,
-        consent: skip ? "" : (storyWin ? state.consent : "")
+        role_family: skip || !guided ? "" : state.role_family,
+        role_other: skip || !guided ? "" : $("role-other").value.trim(),
+        friction: skip || scenario ? "" : state.friction,
+        friction_label: skip || scenario ? "" : (state.friction === "other" ? frictionOther() : state.friction_label),
+        friction_other: skip || scenario ? "" : frictionOther(),
+        heat: skip || scenario ? "" : state.heat,
+        talking_points_week: skip || !guided ? "" : ((WEEK_CONFIG && WEEK_CONFIG.week) || isoWeekId),
+        placement_win: skip || scenario ? "" : (storyWin ? "yes" : "no"),
+        placement_story: skip || scenario ? "" : storyWin,
+        consent: skip || scenario ? "" : (storyWin ? state.consent : "")
       };
-      if (!skip && !open) {
+      if (!skip && guided) {
         const points = (WEEK_CONFIG && WEEK_CONFIG.talking_points) || [];
         points.forEach(function (tp) {
           const rec = state.tp[tp.id] || {};
@@ -1047,7 +1112,7 @@
     function formatBody(payload) {
       const keys = [
         "schema","type","mode","iso_week","submitted_at","name","office",
-        "story","about","spark_id","spark_prompt",
+        "story","scenario","about","spark_id","spark_prompt",
         "role_family","role_other","friction","friction_label","friction_other","heat",
         "talking_points_week",
         "placement_win","placement_story","consent"
@@ -1079,6 +1144,7 @@
     function canSend(payload) {
       if (payload.type === "nothing-this-week") return true;
       if (payload.mode === "open") return !!(payload.story || payload.placement_story);
+      if (payload.mode === "scenario") return !!(payload.scenario || payload.story);
       const hasTp = Object.keys(payload).some(function (k) { return /^tp\d+$/.test(k) && payload[k]; });
       return !!(payload.role_family || payload.friction || hasTp || payload.placement_story);
     }
@@ -1176,7 +1242,7 @@
       if (!identityReady()) { toast("Add your first name and office first."); return; }
       const payload = buildPayload();
       if (!canSend(payload)) {
-        toast(payload.mode === "open" ? "Write a note about this week." : "React to a talking point or pick a role.");
+        toast(payload.mode === "open" ? "Write a note about this week." : (payload.mode === "scenario" ? "Describe a scenario from this week." : "React to a talking point or pick a role."));
         return;
       }
       const body = formatBody(payload);
@@ -1242,23 +1308,75 @@
     $("copy-again").addEventListener("click", function () { submitSignal("copy"); });
     $("start-over").addEventListener("click", function () { window.location = window.location.pathname; });
 
-    const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (Speech) {
-      const btn = $("dictate-story");
+    function bindDictation(btn, box, live, hint) {
+      const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!Speech || !btn || !box) {
+        if (btn) btn.hidden = true;
+        if (hint) hint.hidden = false;
+        return;
+      }
       btn.hidden = false;
+      if (hint) hint.hidden = true;
+      let rec = null;
+      let base = "";
+      function label() { return btn.querySelector(".mic-label") || btn; }
+      function stopRec() {
+        if (rec) {
+          try { rec.stop(); } catch (err) {}
+          rec = null;
+        }
+        btn.classList.remove("listening");
+        btn.setAttribute("aria-pressed", "false");
+        label().textContent = "Start dictation";
+        if (live) live.textContent = "";
+      }
       btn.addEventListener("click", function () {
-        const rec = new Speech();
+        if (rec) { stopRec(); return; }
+        rec = new Speech();
         rec.lang = "en-US";
+        rec.continuous = true;
+        rec.interimResults = true;
+        base = box.value || "";
         rec.onresult = function (ev) {
-          const said = ev.results[0][0].transcript;
-          const box = $("story");
-          box.value = (box.value ? box.value + " " : "") + said;
+          let interim = "";
+          let finals = "";
+          for (let i = ev.resultIndex; i < ev.results.length; i++) {
+            const said = ev.results[i][0].transcript;
+            if (ev.results[i].isFinal) finals += said;
+            else interim += said;
+          }
+          if (finals) {
+            const needsSpace = base && !/\s$/.test(base) && !/^\s/.test(finals);
+            base = base + (needsSpace ? " " : "") + finals;
+            box.value = base;
+          }
+          const gap = (interim && base && !/\s$/.test(base)) ? " " : "";
+          box.value = base + (interim ? gap + interim : "");
+          if (live) live.textContent = interim ? ("Listening: " + interim) : "";
         };
-        rec.onerror = function () { toast("Could not hear that."); };
-        rec.start();
-        toast("Listening…");
+        rec.onerror = function () {
+          toast("Could not hear that. You can type, or use the microphone on your keyboard.");
+          stopRec();
+        };
+        rec.onend = function () {
+          if (rec) {
+            try { rec.start(); } catch (err) { stopRec(); }
+          }
+        };
+        try {
+          rec.start();
+          btn.classList.add("listening");
+          btn.setAttribute("aria-pressed", "true");
+          label().textContent = "Stop dictation";
+          toast("Listening… tap the button when you are done.");
+        } catch (err) {
+          toast("Dictation could not start. Try typing, or use the microphone on your keyboard.");
+          stopRec();
+        }
       });
     }
+    bindDictation($("dictate-story"), $("story"), null, null);
+    bindDictation($("dictate-scenario"), $("scenario"), $("scenario-interim"), $("scenario-mic-hint"));
 
     const OPEN_DEMO = "A warehouse order sat another week because the starting pay is below what people can get at plants nearby. Two good pickers took other work while the hiring manager thought it over.";
     const shot = params.get("shot");
@@ -1298,6 +1416,13 @@
             });
           }
         });
+      } else if (shot === "scenario") {
+        openMode("scenario");
+        $("scenario").value = "Tuesday morning at a packing line in Clinton, a new temp I'll call Maya showed up for her first shift ten minutes early, then almost left during orientation. The supervisor went through the safety video and the badge process so fast that Maya told me she didn't know who to call if she was going to be late, and she started looking up the bus times to go home.";
+        const mic = $("dictate-scenario");
+        const hint = $("scenario-mic-hint");
+        if (mic) { mic.hidden = false; }
+        if (hint) hint.hidden = true;
       } else if (shot === "thanks") {
         $("story").value = OPEN_DEMO;
         finishThanks();
