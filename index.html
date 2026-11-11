@@ -350,6 +350,24 @@
       position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
       overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
     }
+
+    .honeypot {
+      position: absolute;
+      left: -10000px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .closed-banner {
+      margin: 0 0 24px;
+      padding: 14px 16px;
+      border: 1px solid #c4a024;
+      background: #FFF8E0;
+      color: var(--charcoal);
+    }
+    .closed-banner p { margin: 0; }
+    .closed-banner[hidden] { display: none !important; }
     @media (max-width: 700px) {
       .header-inner, .shell, footer.fine { padding-left: 20px; padding-right: 20px; }
       .mode-grid, .id-grid { grid-template-columns: 1fr; }
@@ -365,6 +383,16 @@
   </header>
 
   <main class="shell">
+    <div class="closed-banner" id="closed-banner" hidden>
+      <p>This week's check-in is closed. A new one opens Thursday.</p>
+    </div>
+    <div class="honeypot" aria-hidden="true">
+      <label for="website">Company website</label>
+      <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      <label for="botcheck">I am a bot</label>
+      <input id="botcheck" name="botcheck" type="checkbox" tabindex="-1" autocomplete="off" />
+    </div>
+
     <div id="identity-block">
       <div class="id-grid">
         <div>
@@ -653,6 +681,64 @@
       const g = function (t) { return parts.find(function (p) { return p.type === t; }).value; };
       return { year: +g("year"), month: +g("month"), day: +g("day"), hour: +g("hour"), minute: +g("minute"), second: +g("second") };
     }
+    function pad2(n) { return String(n).padStart(2, "0"); }
+    function chicagoOffsetString(date) {
+      const parts = chicagoParts(date);
+      const asUTC = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
+      const offsetMin = Math.round((asUTC - date.getTime()) / 60000);
+      const sign = offsetMin >= 0 ? "+" : "-";
+      const abs = Math.abs(offsetMin);
+      return sign + pad2(Math.floor(abs / 60)) + ":" + pad2(abs % 60);
+    }
+    function chicagoStamp(date) {
+      const p = chicagoParts(date);
+      return p.year + "-" + pad2(p.month) + "-" + pad2(p.day) + "T" +
+        pad2(p.hour) + ":" + pad2(p.minute) + ":" + pad2(p.second) + chicagoOffsetString(date);
+    }
+    function mondayUtcOfIsoWeek(weekId) {
+      const m = /^(\d{4})-W(\d{2})$/.exec(weekId || "");
+      if (!m) return null;
+      const year = +m[1], week = +m[2];
+      const jan4 = new Date(Date.UTC(year, 0, 4));
+      const dow = jan4.getUTCDay() || 7;
+      const monday1 = new Date(jan4);
+      monday1.setUTCDate(jan4.getUTCDate() - (dow - 1));
+      const monday = new Date(monday1);
+      monday.setUTCDate(monday1.getUTCDate() + (week - 1) * 7);
+      return monday;
+    }
+    function windowClosed() {
+      const weekId = (WEEK_CONFIG && WEEK_CONFIG.week) ? WEEK_CONFIG.week : "";
+      const monday = mondayUtcOfIsoWeek(weekId);
+      if (!monday) return false;
+      const closeDate = new Date(monday);
+      closeDate.setUTCDate(closeDate.getUTCDate() + 7);
+      const y = closeDate.getUTCFullYear(), mo = closeDate.getUTCMonth() + 1, d = closeDate.getUTCDate();
+      const now = chicagoParts(new Date());
+      const nowVal = (((now.year * 100 + now.month) * 100 + now.day) * 100 + now.hour) * 100 + now.minute;
+      const closeVal = (((y * 100 + mo) * 100 + d) * 100 + 8) * 100 + 0;
+      return nowVal >= closeVal;
+    }
+    function honeypotFilled() {
+      const web = $("website");
+      const box = $("botcheck");
+      return !!(web && web.value && web.value.trim()) || !!(box && box.checked);
+    }
+    function showClosed() {
+      const banner = $("closed-banner");
+      if (banner) banner.hidden = false;
+      toast("This week's check-in is closed. A new one opens Thursday.");
+    }
+    function applyClosedState() {
+      if (!windowClosed()) return false;
+      const banner = $("closed-banner");
+      if (banner) banner.hidden = false;
+      ["send-btn", "try-again-btn", "nothing-new", "nothing-new-2", "pick-open", "pick-guided"].forEach(function (id) {
+        const el = $(id);
+        if (el) el.disabled = true;
+      });
+      return true;
+    }
     function isoWeek(year, month, day) {
       const date = new Date(Date.UTC(year, month - 1, day));
       const dow = date.getUTCDay() || 7;
@@ -676,6 +762,7 @@
     const iso = isoWeek(chicago.year, chicago.month, chicago.day);
     const computedWeekId = iso.year + "-W" + String(iso.week).padStart(2, "0");
     const isoWeekId = (WEEK_CONFIG && WEEK_CONFIG.week) ? WEEK_CONFIG.week : computedWeekId;
+    applyClosedState();
     const question = pickQuestion(iso.week, params.get("q"));
     $("checkin-label").textContent = checkInLabel();
     $("choose-eyebrow").textContent = checkInLabel() + ((WEEK_CONFIG && WEEK_CONFIG.week_label) ? " · " + WEEK_CONFIG.week_label : "");
@@ -917,9 +1004,7 @@
     }
 
     function buildPayload() {
-      const now = chicagoParts(new Date());
-      const stamp = now.year + "-" + String(now.month).padStart(2, "0") + "-" + String(now.day).padStart(2, "0") +
-        "T" + String(now.hour).padStart(2, "0") + ":" + String(now.minute).padStart(2, "0") + ":" + String(now.second).padStart(2, "0") + "-06:00";
+      const stamp = chicagoStamp(new Date());
       const skip = state.type === "nothing-this-week";
       const open = state.mode === "open";
       const spark = QUESTIONS.find(function (q) { return q.id === state.spark_id; });
@@ -1072,7 +1157,8 @@
           name: payload.name || "",
           office: payload.office || "",
           mode: payload.mode || "",
-          week: payload.iso_week || ""
+          week: payload.iso_week || "",
+          botcheck: false
         })
       });
       let json = null;
@@ -1094,6 +1180,16 @@
         return;
       }
       const body = formatBody(payload);
+      if (via !== "copy") {
+        if (honeypotFilled()) {
+          finishThanks();
+          return;
+        }
+        if (windowClosed()) {
+          showClosed();
+          return;
+        }
+      }
       if (via === "copy") {
         const ok = await copyText(body);
         toast(ok ? "Copied." : "Could not copy automatically.");
