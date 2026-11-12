@@ -301,6 +301,19 @@
       margin: 8px 0 20px;
       color: var(--charcoal);
     }
+    .thanks-body {
+      margin: 0 0 8px;
+      max-width: 34rem;
+    }
+    .thanks-signoff {
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 1.35rem;
+      font-style: italic;
+      line-height: 1.35;
+      color: var(--charcoal);
+      margin: 28px 0 8px;
+    }
 
     .tp-card {
       border: 1px solid var(--border);
@@ -512,7 +525,6 @@
         linear-gradient(165deg, #08485D 0%, #0A3A4A 42%, #2D2E32 100%);
       color: var(--white);
       text-align: center;
-      cursor: pointer;
     }
     html.is-greeting #greeting-overlay { display: flex; }
     .greeting-inner { max-width: 22rem; }
@@ -549,14 +561,15 @@
       overflow-wrap: break-word;
       word-break: break-word;
     }
-    .greeting-hint {
-      font-family: var(--font-ui);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.62);
-      margin: 28px 0 0;
+    .greeting-continue {
+      margin: 32px auto 0;
+      min-width: 220px;
+      min-height: 52px;
+      padding: 0 36px;
+    }
+    #greeting-overlay .greeting-continue:focus-visible {
+      outline: 3px solid var(--yellow);
+      outline-offset: 3px;
     }
     html.is-greeting #greeting-overlay .greeting-inner {
       animation: greet-in 520ms ease both;
@@ -623,7 +636,7 @@
       <p class="greeting-brand">Sedona <span>Staffing</span></p>
       <div class="greeting-mark" aria-hidden="true"></div>
       <p class="greeting-text" id="greeting-text">Hey there</p>
-      <p class="greeting-hint">Tap to continue</p>
+      <button type="button" class="btn greeting-continue" id="greeting-continue">Continue</button>
     </div>
   </div>
 
@@ -814,8 +827,9 @@
 
     <section class="view" id="view-thanks" aria-labelledby="thanks-title">
       <p class="eyebrow">Thank you</p>
-      <h1 id="thanks-title">Thanks, this helps shape what we share.</h1>
-      <div class="payoff">Your notes help fuel Sedona’s marketing and content engine.</div>
+      <h1 id="thanks-title">Thanks for sharing this week.</h1>
+      <p class="thanks-body" id="thanks-body">Your story helps shape what Sedona shares. We'll check in again next week.</p>
+      <p class="thanks-signoff" id="thanks-signoff">Until next time.</p>
       <div class="actions">
         <button type="button" class="btn" id="copy-again">Copy your note</button>
         <button type="button" class="btn btn-secondary" id="start-over">Start over</button>
@@ -1759,6 +1773,17 @@
     function finishThanks() {
       hideSendError();
       hideCapModal();
+      const nothing = state.type === "nothing-this-week";
+      const title = $("thanks-title");
+      const body = $("thanks-body");
+      if (title) title.textContent = nothing ? "Thanks for checking in." : "Thanks for sharing this week.";
+      if (body) {
+        body.textContent = nothing
+          ? "Even a quiet week helps us know what you're seeing. We'll check in again next week."
+          : "Your story helps shape what Sedona shares. We'll check in again next week.";
+      }
+      const signoff = $("thanks-signoff");
+      if (signoff) signoff.textContent = "Until next time.";
       showView("thanks");
     }
     function nothingNew() {
@@ -1886,7 +1911,6 @@
       el.appendChild(line);
     }
     let greetingClosed = false;
-    let greetingTimer = 0;
     function dismissGreeting() {
       const root = document.documentElement;
       if (greetingClosed || !root.classList.contains("is-greeting")) {
@@ -1894,9 +1918,10 @@
         return;
       }
       greetingClosed = true;
-      if (greetingTimer) { clearTimeout(greetingTimer); greetingTimer = 0; }
       const overlay = $("greeting-overlay");
       const reduced = prefersReducedMotion();
+      const btn = $("greeting-continue");
+      if (btn) btn.disabled = true;
       function done() {
         root.classList.remove("is-greeting", "is-greeting-out", "is-greeting-mid");
         if (overlay) overlay.setAttribute("aria-hidden", "true");
@@ -1920,27 +1945,22 @@
       setGreetingText(email);
       document.documentElement.classList.add("is-greeting");
       const overlay = $("greeting-overlay");
-      if (overlay) {
-        overlay.setAttribute("aria-hidden", "false");
-        overlay.addEventListener("click", function (ev) {
+      const btn = $("greeting-continue");
+      if (overlay) overlay.setAttribute("aria-hidden", "false");
+      if (btn) {
+        btn.addEventListener("click", function (ev) {
           ev.preventDefault();
+          ev.stopPropagation();
           dismissGreeting();
         });
+        const delay = prefersReducedMotion() ? 220 : 540;
+        setTimeout(function () {
+          try { btn.focus(); } catch (err) {}
+        }, delay);
       }
-      document.addEventListener("keydown", function onKey(ev) {
-        if (ev.key === "Escape" || ev.key === "Enter" || ev.key === " ") {
-          ev.preventDefault();
-          document.removeEventListener("keydown", onKey);
-          dismissGreeting();
-        }
-      });
-      if (shotName === "greeting" || shotName === "greeting-generic") return;
       if (shotName === "greeting-mid") {
         document.documentElement.classList.add("is-greeting-mid");
-        return;
       }
-      const hold = prefersReducedMotion() ? 900 : 2200;
-      greetingTimer = setTimeout(function () { dismissGreeting(); }, hold);
     }
     startGreeting();
 
