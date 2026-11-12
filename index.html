@@ -329,6 +329,87 @@
     }
     .tp-source a { color: var(--teal-dark); }
     .tp-card .field { margin-top: 10px; }
+    .kpi-section {
+      margin: 24px 0 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+    }
+    .kpi-item { margin: 0 0 18px; }
+    .kpi-item .field { margin-bottom: 8px; }
+    .kpi-error {
+      margin: 8px 0 0;
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      color: #9a2f22;
+    }
+    .kpi-item.is-error .stepper input,
+    .kpi-item.is-error input[type="text"],
+    .kpi-item.is-error textarea.short {
+      border-color: #c45c4a;
+    }
+    .kpi-item.is-error .stepper input:focus,
+    .kpi-item.is-error input[type="text"]:focus,
+    .kpi-item.is-error textarea.short:focus {
+      outline: 3px solid rgba(196,92,74,.35);
+      border-color: #c45c4a;
+    }
+    .kpi-item.is-error .chips {
+      outline: 2px solid #c45c4a;
+      outline-offset: 3px;
+      border-radius: var(--pill);
+    }
+    .stepper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      max-width: 240px;
+    }
+    .stepper input[type="number"] {
+      width: 88px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      -moz-appearance: textfield;
+      padding: 12px 8px;
+    }
+    .stepper input[type="number"]::-webkit-outer-spin-button,
+    .stepper input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .stepper-btn {
+      appearance: none;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--charcoal);
+      font-family: var(--font-ui);
+      font-size: 22px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .stepper-btn:hover { border-color: #35A3BF; }
+    .stepper-btn:focus-visible { outline: 3px solid rgba(53,163,191,.45); outline-offset: 2px; }
+    #share-learn-note-wrap { margin-top: 12px; }
+    html.shot-kpi header.top,
+    html.shot-kpi #identity-block,
+    html.shot-kpi #closed-banner,
+    html.shot-kpi .switch-row,
+    html.shot-kpi #write-title,
+    html.shot-kpi #tp-intro,
+    html.shot-kpi #tp-week-label,
+    html.shot-kpi #talking-points,
+    html.shot-kpi #guided-form > .chip-group-label,
+    html.shot-kpi .actions,
+    html.shot-kpi footer.fine {
+      display: none !important;
+    }
+    html.shot-kpi .shell { padding-top: 16px; padding-bottom: 24px; }
+    html.shot-kpi .kpi-section { margin-top: 0; border-top: 0; padding-top: 0; }
     footer.fine { padding-bottom: 32px; font-size: 13px; }
     .toast {
       position: fixed;
@@ -511,28 +592,70 @@
         <p class="fine" id="tp-intro" style="margin:-4px 0 8px;">Each one is a national or industry snapshot. Add your local, unique experience.</p>
         <p class="fine" id="tp-week-label" style="margin:-4px 0 14px;"></p>
         <div id="talking-points"></div>
-        <p class="chip-group-label">Hardest role this week</p>
-        <div id="role-chips"></div>
-        <div id="role-other-wrap" hidden>
-          <label class="field" for="role-other" style="margin-top:12px">What kind of role?</label>
-          <input id="role-other" type="text" maxlength="80" autocomplete="off" />
-        </div>
-        <p class="chip-group-label">Main friction</p>
-        <div class="chips" id="guided-friction" role="radiogroup" aria-label="Main friction"></div>
-        <div id="guided-friction-other-wrap" hidden>
-          <label class="field" for="guided-friction-other" style="margin-top:12px">What is the friction?</label>
-          <input id="guided-friction-other" type="text" maxlength="80" autocomplete="off" />
-        </div>
-        <details class="more">
-          <summary>Add a placement win (optional)</summary>
-          <label class="field" for="guided-win-story" style="margin-top:14px">The story in two sentences</label>
-          <textarea class="short" id="guided-win-story" maxlength="500"></textarea>
-          <p class="field">How should we use this?</p>
-          <div class="consent" role="radiogroup" aria-label="Consent" id="guided-consent">
-            <button type="button" class="chip" data-consent="public-anonymized" data-scope="guided">Public, with details changed</button>
-            <button type="button" class="chip" data-consent="internal" data-scope="guided">Internal only</button>
+        <div class="kpi-section" id="guided-kpis">
+          <p class="chip-group-label">This week’s numbers</p>
+          <p class="fine" style="margin:-4px 0 14px;">These questions stay the same every week and are required in Guided. Enter a number (0 is fine) or take a short tap.</p>
+
+          <div class="kpi-item" data-kpi="ncns_count">
+            <label class="field" for="kpi-ncns">How many no-call no-shows did you have this week?</label>
+            <div class="stepper">
+              <button type="button" class="stepper-btn" data-stepper="kpi-ncns" data-dir="-1" aria-label="Decrease no-call no-shows">−</button>
+              <input id="kpi-ncns" type="number" inputmode="numeric" min="0" step="1" max="999" autocomplete="off" aria-describedby="err-kpi-ncns" />
+              <button type="button" class="stepper-btn" data-stepper="kpi-ncns" data-dir="1" aria-label="Increase no-call no-shows">+</button>
+            </div>
+            <p class="kpi-error" id="err-kpi-ncns" hidden>Enter a number. 0 is fine if you had none.</p>
           </div>
-        </details>
+
+          <div class="kpi-item" data-kpi="placements_count">
+            <label class="field" for="kpi-placements">How many new placements or starts did you have this week?</label>
+            <div class="stepper">
+              <button type="button" class="stepper-btn" data-stepper="kpi-placements" data-dir="-1" aria-label="Decrease placements">−</button>
+              <input id="kpi-placements" type="number" inputmode="numeric" min="0" step="1" max="999" autocomplete="off" aria-describedby="err-kpi-placements" />
+              <button type="button" class="stepper-btn" data-stepper="kpi-placements" data-dir="1" aria-label="Increase placements">+</button>
+            </div>
+            <p class="kpi-error" id="err-kpi-placements" hidden>Enter a number. 0 is fine if you had none.</p>
+          </div>
+
+          <div class="kpi-item" data-kpi="open_orders_hard">
+            <label class="field" for="kpi-open-orders">How many open orders are you struggling to fill?</label>
+            <div class="stepper">
+              <button type="button" class="stepper-btn" data-stepper="kpi-open-orders" data-dir="-1" aria-label="Decrease hard-to-fill orders">−</button>
+              <input id="kpi-open-orders" type="number" inputmode="numeric" min="0" step="1" max="999" autocomplete="off" aria-describedby="err-kpi-open-orders" />
+              <button type="button" class="stepper-btn" data-stepper="kpi-open-orders" data-dir="1" aria-label="Increase hard-to-fill orders">+</button>
+            </div>
+            <p class="kpi-error" id="err-kpi-open-orders" hidden>Enter a number. 0 is fine if you had none.</p>
+          </div>
+
+          <div class="kpi-item" data-kpi="hardest_role">
+            <label class="field" for="kpi-hardest-role">Hardest role to fill this week</label>
+            <input id="kpi-hardest-role" type="text" maxlength="80" autocomplete="off" placeholder="Short title is enough" aria-describedby="err-kpi-hardest-role" />
+            <p class="kpi-error" id="err-kpi-hardest-role" hidden>Add the hardest role to fill this week.</p>
+          </div>
+
+          <div class="kpi-item" data-kpi="ttf_trend">
+            <p class="field" id="ttf-trend-label">Average time-to-fill this week</p>
+            <div class="chips" id="ttf-trend" role="radiogroup" aria-labelledby="ttf-trend-label" aria-describedby="err-kpi-ttf">
+              <button type="button" class="chip" role="radio" aria-checked="false" data-ttf="faster">Faster</button>
+              <button type="button" class="chip" role="radio" aria-checked="false" data-ttf="same">Same</button>
+              <button type="button" class="chip" role="radio" aria-checked="false" data-ttf="slower">Slower</button>
+            </div>
+            <p class="kpi-error" id="err-kpi-ttf" hidden>Choose faster, same, or slower.</p>
+          </div>
+
+          <div class="kpi-item" data-kpi="share_learn">
+            <p class="field" id="share-learn-label">Did you try something or learn something this week that others should know?</p>
+            <div class="chips" id="share-learn" role="radiogroup" aria-labelledby="share-learn-label" aria-describedby="err-kpi-share-learn">
+              <button type="button" class="chip" role="radio" aria-checked="false" data-share-learn="yes">Yes</button>
+              <button type="button" class="chip" role="radio" aria-checked="false" data-share-learn="no">No</button>
+            </div>
+            <p class="kpi-error" id="err-kpi-share-learn" hidden>Choose yes or no.</p>
+            <div id="share-learn-note-wrap" hidden>
+              <label class="field" for="share-learn-note">What did you try or learn?</label>
+              <textarea class="short" id="share-learn-note" maxlength="500" placeholder="A couple of sentences is enough." aria-describedby="err-kpi-share-learn-note"></textarea>
+              <p class="kpi-error" id="err-kpi-share-learn-note" hidden>Add a short note about what you tried or learned.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="scenario-form" hidden>
@@ -716,7 +839,9 @@
       mode: "open", type: "weekly-pulse",
       about: "", spark_id: "",
       role_family: "", friction: "", friction_label: "", heat: "",
-      consent: ""
+      consent: "",
+      ttf_trend: "",
+      share_learn: ""
     };
 
     function $(id) { return document.getElementById(id); }
@@ -855,8 +980,10 @@
     function selectFriction(item, which) {
       state.friction = item.id;
       state.friction_label = item.label;
-      $(which === "open" ? "open-friction-other-wrap" : "guided-friction-other-wrap").hidden = item.id !== "other";
-      markChip($(which === "open" ? "open-friction" : "guided-friction"), item.id);
+      const wrap = $(which === "open" ? "open-friction-other-wrap" : "guided-friction-other-wrap");
+      if (wrap) wrap.hidden = item.id !== "other";
+      const root = $(which === "open" ? "open-friction" : "guided-friction");
+      if (root) markChip(root, item.id);
     }
     function selectHeat(n, which) {
       state.heat = String(n);
@@ -887,36 +1014,95 @@
       markChip(root, item.id);
     });
     renderChips($("open-friction"), FRICTIONS, function (item) { selectFriction(item, "open"); });
-    renderChips($("guided-friction"), FRICTIONS, function (item) { selectFriction(item, "guided"); });
+    const guidedFriction = $("guided-friction");
+    if (guidedFriction) renderChips(guidedFriction, FRICTIONS, function (item) { selectFriction(item, "guided"); });
     buildHeat($("open-heat"), "open");
 
-    const roleRoot = $("role-chips");
-    ROLES.forEach(function (group) {
-      const label = document.createElement("p");
-      label.className = "chip-group-label";
-      label.textContent = group.group;
-      roleRoot.appendChild(label);
-      const wrap = document.createElement("div");
-      wrap.className = "chips";
-      group.items.forEach(function (item) {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "chip";
-        btn.setAttribute("role", "radio");
-        btn.setAttribute("aria-checked", "false");
-        btn.dataset.value = item;
-        btn.textContent = item;
-        btn.addEventListener("click", function () {
-          state.role_family = item;
-          Array.prototype.forEach.call(roleRoot.querySelectorAll(".chip"), function (el) {
-            el.setAttribute("aria-checked", el.dataset.value === item ? "true" : "false");
-          });
-          $("role-other-wrap").hidden = item !== "Other";
-        });
-        wrap.appendChild(btn);
+    function setStepperValue(id, next) {
+      const input = $(id);
+      if (!input) return;
+      if (next === "" || next == null) {
+        input.value = "";
+        return;
+      }
+      const n = Math.max(0, Math.min(999, parseInt(next, 10)));
+      input.value = String(Number.isFinite(n) ? n : 0);
+    }
+    document.querySelectorAll(".stepper-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const id = btn.getAttribute("data-stepper");
+        const dir = parseInt(btn.getAttribute("data-dir"), 10) || 0;
+        const input = $(id);
+        if (!input) return;
+        const raw = input.value.trim();
+        if (raw === "") {
+          setStepperValue(id, dir > 0 ? 1 : 0);
+        } else {
+          const current = parseInt(raw, 10);
+          const base = Number.isFinite(current) ? current : 0;
+          setStepperValue(id, base + dir);
+        }
+        if (typeof clearKpiErrorFor === "function") clearKpiErrorFor(id);
       });
-      roleRoot.appendChild(wrap);
     });
+    ["kpi-ncns", "kpi-placements", "kpi-open-orders"].forEach(function (id) {
+      const input = $(id);
+      if (!input) return;
+      input.addEventListener("input", function () {
+        const raw = input.value.trim();
+        if (raw !== "" && !/^[0-9]+$/.test(raw)) setStepperValue(id, 0);
+        if (typeof clearKpiErrorFor === "function") clearKpiErrorFor(id);
+      });
+    });
+    function markNamedChips(root, attr, value) {
+      if (!root) return;
+      Array.prototype.forEach.call(root.querySelectorAll(".chip"), function (el) {
+        el.setAttribute("aria-checked", el.getAttribute(attr) === value ? "true" : "false");
+      });
+    }
+    const ttfRoot = $("ttf-trend");
+    if (ttfRoot) {
+      ttfRoot.addEventListener("click", function (ev) {
+        const btn = ev.target.closest("[data-ttf]");
+        if (!btn) return;
+        state.ttf_trend = btn.getAttribute("data-ttf") || "";
+        markNamedChips(ttfRoot, "data-ttf", state.ttf_trend);
+        if (typeof clearKpiErrorFor === "function") clearKpiErrorFor("ttf-trend");
+      });
+    }
+    function setShareLearn(value) {
+      state.share_learn = value || "";
+      markNamedChips($("share-learn"), "data-share-learn", state.share_learn);
+      const wrap = $("share-learn-note-wrap");
+      if (wrap) wrap.hidden = state.share_learn !== "yes";
+      if (state.share_learn !== "yes") {
+        const note = $("share-learn-note");
+        if (note) note.value = "";
+      }
+    }
+    const shareRoot = $("share-learn");
+    if (shareRoot) {
+      shareRoot.addEventListener("click", function (ev) {
+        const btn = ev.target.closest("[data-share-learn]");
+        if (!btn) return;
+        setShareLearn(btn.getAttribute("data-share-learn") || "");
+        if (typeof clearKpiErrorFor === "function") clearKpiErrorFor("share-learn");
+        if (state.share_learn === "yes") {
+          const note = $("share-learn-note");
+          if (note) note.focus();
+        }
+      });
+    }
+    if ($("kpi-hardest-role")) {
+      $("kpi-hardest-role").addEventListener("input", function () {
+        if (typeof clearKpiErrorFor === "function") clearKpiErrorFor("kpi-hardest-role");
+      });
+    }
+    if ($("share-learn-note")) {
+      $("share-learn-note").addEventListener("input", function () {
+        if (typeof clearKpiErrorFor === "function") clearKpiErrorFor("share-learn-note");
+      });
+    }
 
     document.querySelectorAll("[data-consent]").forEach(function (btn) {
       btn.addEventListener("click", function () {
@@ -1056,12 +1242,19 @@
 
     function winStory() {
       if (state.mode === "open") return $("open-win-story").value.trim();
-      if (state.mode === "guided") return $("guided-win-story").value.trim();
       return "";
     }
     function frictionOther() {
-      if (state.mode !== "open" && state.mode !== "guided") return "";
-      return $(state.mode === "open" ? "open-friction-other" : "guided-friction-other").value.trim();
+      if (state.mode !== "open") return "";
+      return $("open-friction-other").value.trim();
+    }
+    function kpiNumber(id) {
+      const el = $(id);
+      if (!el) return "";
+      const raw = el.value.trim();
+      if (raw === "") return "";
+      if (!/^[0-9]+$/.test(raw)) return "";
+      return String(parseInt(raw, 10));
     }
 
     function buildPayload() {
@@ -1086,16 +1279,23 @@
         about: skip || !open ? "" : state.about,
         spark_id: skip || !open ? "" : (state.spark_id || ""),
         spark_prompt: skip || !open || !spark ? "" : spark.prompt,
-        role_family: skip || !guided ? "" : state.role_family,
-        role_other: skip || !guided ? "" : $("role-other").value.trim(),
-        friction: skip || scenario ? "" : state.friction,
-        friction_label: skip || scenario ? "" : (state.friction === "other" ? frictionOther() : state.friction_label),
-        friction_other: skip || scenario ? "" : frictionOther(),
-        heat: skip || scenario ? "" : state.heat,
+        role_family: "",
+        role_other: "",
+        friction: skip || !open ? "" : state.friction,
+        friction_label: skip || !open ? "" : (state.friction === "other" ? frictionOther() : state.friction_label),
+        friction_other: skip || !open ? "" : frictionOther(),
+        heat: skip || !open ? "" : state.heat,
         talking_points_week: skip || !guided ? "" : ((WEEK_CONFIG && WEEK_CONFIG.week) || isoWeekId),
-        placement_win: skip || scenario ? "" : (storyWin ? "yes" : "no"),
-        placement_story: skip || scenario ? "" : storyWin,
-        consent: skip || scenario ? "" : (storyWin ? state.consent : "")
+        ncns_count: skip || !guided ? "" : kpiNumber("kpi-ncns"),
+        placements_count: skip || !guided ? "" : kpiNumber("kpi-placements"),
+        open_orders_hard: skip || !guided ? "" : kpiNumber("kpi-open-orders"),
+        hardest_role: skip || !guided ? "" : ($("kpi-hardest-role") ? $("kpi-hardest-role").value.trim() : ""),
+        ttf_trend: skip || !guided ? "" : state.ttf_trend,
+        share_learn: skip || !guided ? "" : state.share_learn,
+        share_learn_note: skip || !guided || state.share_learn !== "yes" ? "" : ($("share-learn-note") ? $("share-learn-note").value.trim() : ""),
+        placement_win: skip || !open ? "" : (storyWin ? "yes" : "no"),
+        placement_story: skip || !open ? "" : storyWin,
+        consent: skip || !open ? "" : (storyWin ? state.consent : "")
       };
       if (!skip && guided) {
         const points = (WEEK_CONFIG && WEEK_CONFIG.talking_points) || [];
@@ -1115,6 +1315,8 @@
         "story","scenario","about","spark_id","spark_prompt",
         "role_family","role_other","friction","friction_label","friction_other","heat",
         "talking_points_week",
+        "ncns_count","placements_count","open_orders_hard","hardest_role","ttf_trend",
+        "share_learn","share_learn_note",
         "placement_win","placement_story","consent"
       ];
       const tpKeys = Object.keys(payload).filter(function (k) { return /^tp\d+$/.test(k); }).sort();
@@ -1141,12 +1343,86 @@
         } catch (err) { return false; }
       }
     }
+    function numberAnswered(value) {
+      return value === "0" || !!value;
+    }
+    const KPI_FIELDS = [
+      { key: "ncns_count", item: "ncns_count", focus: "kpi-ncns", error: "err-kpi-ncns", message: "Enter a number. 0 is fine if you had none." },
+      { key: "placements_count", item: "placements_count", focus: "kpi-placements", error: "err-kpi-placements", message: "Enter a number. 0 is fine if you had none." },
+      { key: "open_orders_hard", item: "open_orders_hard", focus: "kpi-open-orders", error: "err-kpi-open-orders", message: "Enter a number. 0 is fine if you had none." },
+      { key: "hardest_role", item: "hardest_role", focus: "kpi-hardest-role", error: "err-kpi-hardest-role", message: "Add the hardest role to fill this week." },
+      { key: "ttf_trend", item: "ttf_trend", focus: "ttf-trend", error: "err-kpi-ttf", message: "Choose faster, same, or slower." },
+      { key: "share_learn", item: "share_learn", focus: "share-learn", error: "err-kpi-share-learn", message: "Choose yes or no." },
+      { key: "share_learn_note", item: "share_learn", focus: "share-learn-note", error: "err-kpi-share-learn-note", message: "Add a short note about what you tried or learned.", onlyIfYes: true }
+    ];
+    function kpiGaps(payload) {
+      const gaps = [];
+      KPI_FIELDS.forEach(function (field) {
+        if (field.onlyIfYes) {
+          if (payload.share_learn === "yes" && !payload.share_learn_note) gaps.push(field);
+          return;
+        }
+        if (field.key === "ncns_count" || field.key === "placements_count" || field.key === "open_orders_hard") {
+          if (!numberAnswered(payload[field.key])) gaps.push(field);
+          return;
+        }
+        if (!payload[field.key]) gaps.push(field);
+      });
+      return gaps;
+    }
+    function clearKpiErrors() {
+      document.querySelectorAll(".kpi-item.is-error").forEach(function (item) {
+        item.classList.remove("is-error");
+      });
+      document.querySelectorAll(".kpi-error").forEach(function (el) {
+        el.hidden = true;
+      });
+      ["kpi-ncns", "kpi-placements", "kpi-open-orders", "kpi-hardest-role", "share-learn-note", "ttf-trend", "share-learn"].forEach(function (id) {
+        const el = $(id);
+        if (el) el.removeAttribute("aria-invalid");
+      });
+    }
+    function clearKpiErrorFor(targetId) {
+      const field = KPI_FIELDS.filter(function (item) { return item.focus === targetId; })[0];
+      if (!field) return;
+      const err = $(field.error);
+      if (err) err.hidden = true;
+      const item = document.querySelector('.kpi-item[data-kpi="' + field.item + '"]');
+      if (item) {
+        const stillOpen = Array.prototype.some.call(item.querySelectorAll(".kpi-error"), function (el) { return !el.hidden; });
+        if (!stillOpen) item.classList.remove("is-error");
+      }
+      const el = $(field.focus);
+      if (el) el.removeAttribute("aria-invalid");
+    }
+    function showKpiErrors(gaps) {
+      clearKpiErrors();
+      if (!gaps.length) return;
+      gaps.forEach(function (field) {
+        const item = document.querySelector('.kpi-item[data-kpi="' + field.item + '"]');
+        if (item) item.classList.add("is-error");
+        const err = $(field.error);
+        if (err) {
+          err.textContent = field.message;
+          err.hidden = false;
+        }
+        const el = $(field.focus);
+        if (el) el.setAttribute("aria-invalid", "true");
+      });
+      const first = gaps[0];
+      const focusEl = $(first.focus);
+      const item = document.querySelector('.kpi-item[data-kpi="' + first.item + '"]');
+      const scrollEl = item || focusEl;
+      if (scrollEl && scrollEl.scrollIntoView) scrollEl.scrollIntoView({ block: "center", behavior: "smooth" });
+      if (focusEl && focusEl.focus) {
+        try { focusEl.focus(); } catch (err) {}
+      }
+    }
     function canSend(payload) {
       if (payload.type === "nothing-this-week") return true;
       if (payload.mode === "open") return !!(payload.story || payload.placement_story);
       if (payload.mode === "scenario") return !!(payload.scenario || payload.story);
-      const hasTp = Object.keys(payload).some(function (k) { return /^tp\d+$/.test(k) && payload[k]; });
-      return !!(payload.role_family || payload.friction || hasTp || payload.placement_story);
+      return kpiGaps(payload).length === 0;
     }
     function hideSendError() {
       const box = $("send-error");
@@ -1242,9 +1518,16 @@
       if (!identityReady()) { toast("Add your first name and office first."); return; }
       const payload = buildPayload();
       if (!canSend(payload)) {
-        toast(payload.mode === "open" ? "Write a note about this week." : (payload.mode === "scenario" ? "Describe a scenario from this week." : "React to a talking point or pick a role."));
+        if (payload.mode === "open") toast("Write a note about this week.");
+        else if (payload.mode === "scenario") toast("Describe a scenario from this week.");
+        else {
+          const gaps = kpiGaps(payload);
+          showKpiErrors(gaps);
+          toast(gaps[0] ? gaps[0].message : "Answer this week’s numbers first.");
+        }
         return;
       }
+      clearKpiErrors();
       const body = formatBody(payload);
       if (via !== "copy") {
         if (honeypotFilled()) {
@@ -1390,13 +1673,8 @@
       } else if (shot === "open") {
         openMode("open");
         $("story").value = OPEN_DEMO;
-      } else if (shot === "guided") {
+      } else if (shot === "guided" || shot === "kpi" || shot === "kpi-yes" || shot === "kpi-error") {
         openMode("guided");
-        state.role_family = "Warehouse / material handling";
-        Array.prototype.forEach.call(roleRoot.querySelectorAll(".chip"), function (el) {
-          el.setAttribute("aria-checked", el.dataset.value === state.role_family ? "true" : "false");
-        });
-        selectFriction(FRICTIONS[0], "guided");
         [
           { id: "tp1", reaction: "seeing more", why: "More warehouse orders this week than last month." },
           { id: "tp2", reaction: "seeing more", why: "People keep asking for full-time hours." },
@@ -1416,6 +1694,34 @@
             });
           }
         });
+        if (shot !== "kpi-error") {
+          setStepperValue("kpi-ncns", 3);
+          setStepperValue("kpi-placements", 2);
+          setStepperValue("kpi-open-orders", 4);
+          if ($("kpi-hardest-role")) $("kpi-hardest-role").value = "2nd shift machine operator";
+          state.ttf_trend = "slower";
+          markNamedChips($("ttf-trend"), "data-ttf", "slower");
+          if (shot === "kpi-yes") {
+            setShareLearn("yes");
+            if ($("share-learn-note")) $("share-learn-note").value = "I started a same-day text if someone was 15 minutes late. Two people still made their shift who would have been no-shows last month.";
+          } else {
+            setShareLearn("no");
+          }
+        } else {
+          setStepperValue("kpi-ncns", "");
+          setStepperValue("kpi-placements", 2);
+          setStepperValue("kpi-open-orders", 4);
+          if ($("kpi-hardest-role")) $("kpi-hardest-role").value = "2nd shift machine operator";
+          state.ttf_trend = "slower";
+          markNamedChips($("ttf-trend"), "data-ttf", "slower");
+          setShareLearn("no");
+          showKpiErrors(kpiGaps(buildPayload()));
+        }
+        if (shot === "kpi" || shot === "kpi-yes" || shot === "kpi-error") {
+          document.documentElement.classList.add("shot-kpi");
+          if (document.body) document.body.scrollTop = 0;
+          if (document.documentElement) document.documentElement.scrollTop = 0;
+        }
       } else if (shot === "scenario") {
         openMode("scenario");
         $("scenario").value = "Tuesday morning at a packing line in Clinton, a new temp I'll call Maya showed up for her first shift ten minutes early, then almost left during orientation. The supervisor went through the safety video and the badge process so fast that Maya told me she didn't know who to call if she was going to be late, and she started looking up the bus times to go home.";
