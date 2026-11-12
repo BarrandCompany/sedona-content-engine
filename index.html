@@ -301,6 +301,19 @@
       margin: 8px 0 20px;
       color: var(--charcoal);
     }
+    .thanks-body {
+      margin: 0 0 8px;
+      max-width: 34rem;
+    }
+    .thanks-signoff {
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 1.35rem;
+      font-style: italic;
+      line-height: 1.35;
+      color: var(--charcoal);
+      margin: 28px 0 8px;
+    }
 
     .tp-card {
       border: 1px solid var(--border);
@@ -492,9 +505,141 @@
       .header-inner, .shell, footer.fine { padding-left: 20px; padding-right: 20px; }
       .id-grid { grid-template-columns: 1fr; }
     }
+
+    html.is-greeting,
+    html.is-greeting body {
+      overflow: hidden;
+      height: 100%;
+    }
+    #greeting-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 28px 40px;
+      background:
+        radial-gradient(ellipse at 18% 0%, rgba(53,163,191,.38), transparent 55%),
+        linear-gradient(165deg, #08485D 0%, #0A3A4A 42%, #2D2E32 100%);
+      color: var(--white);
+      text-align: center;
+    }
+    html.is-greeting #greeting-overlay { display: flex; }
+    .greeting-inner { max-width: 22rem; }
+    .greeting-brand {
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: .02em;
+      margin: 0 0 22px;
+      opacity: .92;
+    }
+    .greeting-brand span { color: var(--yellow); }
+    .greeting-mark {
+      width: 48px;
+      height: 4px;
+      border-radius: 4px;
+      background: var(--yellow);
+      margin: 0 auto 22px;
+    }
+    .greeting-text {
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: clamp(1.7rem, 8vw, 2.25rem);
+      line-height: 1.25;
+      color: var(--white);
+      margin: 0;
+    }
+    .greeting-email {
+      display: block;
+      margin-top: 12px;
+      color: var(--yellow);
+      font-size: clamp(1.02rem, 4.5vw, 1.22rem);
+      line-height: 1.35;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .greeting-continue {
+      margin: 32px auto 0;
+      min-width: 220px;
+      min-height: 52px;
+      padding: 0 36px;
+    }
+    #greeting-overlay .greeting-continue:focus-visible {
+      outline: 3px solid var(--yellow);
+      outline-offset: 3px;
+    }
+    html.is-greeting #greeting-overlay .greeting-inner {
+      animation: greet-in 520ms ease both;
+    }
+    html.is-greeting-out #greeting-overlay {
+      animation: greet-out 640ms ease forwards;
+    }
+    html.is-greeting-out #greeting-overlay .greeting-inner {
+      animation: greet-inner-out 640ms ease forwards;
+    }
+    html.is-greeting-mid #greeting-overlay {
+      animation: none;
+      opacity: .62;
+      transform: translateY(-18%);
+    }
+    html.is-greeting-mid #greeting-overlay .greeting-inner {
+      animation: none;
+    }
+    @keyframes greet-in {
+      from { opacity: 0; transform: translateY(18px) scale(.98); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes greet-out {
+      to { opacity: 0; transform: translateY(-28px); }
+    }
+    @keyframes greet-inner-out {
+      to { opacity: 0; transform: translateY(-12px); }
+    }
+    @keyframes greet-fade-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes greet-fade-out { to { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html.is-greeting #greeting-overlay .greeting-inner {
+        animation: greet-fade-in 200ms ease both;
+      }
+      html.is-greeting-out #greeting-overlay {
+        animation: greet-fade-out 200ms ease forwards;
+      }
+      html.is-greeting-out #greeting-overlay .greeting-inner { animation: none; }
+      html.is-greeting-mid #greeting-overlay {
+        opacity: .55;
+        transform: none;
+      }
+    }
   </style>
+  <script>
+  /* Show the greeting overlay before first paint when it should play. */
+  (function () {
+    try {
+      var search = location.search || "";
+      var match = /(?:^|[?&])shot=([^&]*)/.exec(search);
+      var shot = match ? decodeURIComponent(match[1].replace(/\+/g, " ")) : "";
+      if (shot && shot.indexOf("greeting") !== 0) return;
+      if (shot.indexOf("greeting") !== 0 && sessionStorage.getItem("sedonaGreetingPlayed") === "1") return;
+      document.documentElement.classList.add("is-greeting");
+    } catch (err) {}
+  })();
+  </script>
 </head>
+
 <body>
+  <div id="greeting-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="greeting-text">
+    <div class="greeting-inner">
+      <p class="greeting-brand">Sedona <span>Staffing</span></p>
+      <div class="greeting-mark" aria-hidden="true"></div>
+      <p class="greeting-text" id="greeting-text">Hey there</p>
+      <button type="button" class="btn greeting-continue" id="greeting-continue">Continue</button>
+    </div>
+  </div>
+
   <header class="top">
     <div class="header-inner">
       <div class="brand">Sedona <span>Staffing</span></div>
@@ -524,6 +669,7 @@
           <select id="office" autocomplete="off"><option value="">Select your office</option></select>
         </div>
       </div>
+      <input type="hidden" id="recipient-email" name="recipient_email" value="" autocomplete="off" />
     </div>
 
     <section class="view active" id="view-choose" aria-labelledby="choose-title">
@@ -681,8 +827,9 @@
 
     <section class="view" id="view-thanks" aria-labelledby="thanks-title">
       <p class="eyebrow">Thank you</p>
-      <h1 id="thanks-title">Thanks, this helps shape what we share.</h1>
-      <div class="payoff">Your notes help fuel Sedona’s marketing and content engine.</div>
+      <h1 id="thanks-title">Thanks for sharing this week.</h1>
+      <p class="thanks-body" id="thanks-body">Your story helps shape what Sedona shares. We'll check in again next week.</p>
+      <p class="thanks-signoff" id="thanks-signoff">Until next time.</p>
       <div class="actions">
         <button type="button" class="btn" id="copy-again">Copy your note</button>
         <button type="button" class="btn btn-secondary" id="start-over">Start over</button>
@@ -758,6 +905,18 @@
       "San Diego, CA","Collierville, TN",
       "I work across multiple offices","Corporate / marketing / other","Test"
     ];
+    const OFFICE_KEYS = {
+      "moline": "Moline, IL (Headquarters)",
+      "rock-falls": "Rock Falls, IL",
+      "clinton": "Clinton, IA",
+      "maquoketa": "Maquoketa, IA",
+      "muscatine": "Muscatine, IA",
+      "san-diego": "San Diego, CA",
+      "collierville": "Collierville, TN",
+      "multi": "I work across multiple offices",
+      "corporate": "Corporate / marketing / other",
+      "test": "Test"
+    };
     const ROLES = [
       { group: "Industrial", items: [
         "Warehouse / material handling","Production / assembly / machine operator",
@@ -954,6 +1113,46 @@
       opt.value = o; opt.textContent = o;
       $("office").appendChild(opt);
     });
+
+    const EMAIL_MAX = 254;
+    const EMAIL_RE = /^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$/;
+    function sanitizeEmail(raw) {
+      const value = String(raw || "").trim();
+      if (!value || value.length > EMAIL_MAX) return "";
+      if (/[<>"'`]/.test(value)) return "";
+      if (!EMAIL_RE.test(value)) return "";
+      return value;
+    }
+    function handleFromEmail(email) {
+      let local = String(email || "").split("@")[0] || "";
+      local = local.split("+")[0];
+      local = local.replace(/[._]+/g, " ").trim();
+      local = local.replace(/[^\w\s\-]/g, "").slice(0, 40).trim();
+      if (!local) return "";
+      return local.split(/\s+/).map(function (word) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }).join(" ");
+    }
+    function officeFromParam(raw) {
+      const value = String(raw || "").trim();
+      if (!value) return "";
+      const key = value.toLowerCase();
+      if (OFFICE_KEYS[key]) return OFFICE_KEYS[key];
+      if (OFFICES.indexOf(value) !== -1) return value;
+      return "";
+    }
+    function applyPrefill() {
+      const email = sanitizeEmail(params.get("u"));
+      const emailEl = $("recipient-email");
+      if (emailEl) emailEl.value = email;
+      if (email && !$("name").value) {
+        const handle = handleFromEmail(email);
+        if (handle) $("name").value = handle;
+      }
+      const office = officeFromParam(params.get("o"));
+      if (office && !$("office").value) $("office").value = office;
+    }
+    applyPrefill();
 
     function identityReady() {
       return !!(firstName($("name").value) && $("office").value);
@@ -1274,6 +1473,7 @@
         submitted_at: stamp,
         name: firstName($("name").value),
         office: $("office").value,
+        email: ($("recipient-email") && $("recipient-email").value) ? $("recipient-email").value : "",
         story: skip ? "" : (open ? $("story").value.trim() : scenarioText),
         scenario: scenarioText,
         about: skip || !open ? "" : state.about,
@@ -1311,7 +1511,7 @@
     }
     function formatBody(payload) {
       const keys = [
-        "schema","type","mode","iso_week","submitted_at","name","office",
+        "schema","type","mode","iso_week","submitted_at","name","office","email",
         "story","scenario","about","spark_id","spark_prompt",
         "role_family","role_other","friction","friction_label","friction_other","heat",
         "talking_points_week",
@@ -1498,6 +1698,8 @@
           message: formatBody(payload),
           name: payload.name || "",
           office: payload.office || "",
+          email: payload.email || "",
+          recipient_email: payload.email || "",
           mode: payload.mode || "",
           week: payload.iso_week || "",
           botcheck: false
@@ -1571,6 +1773,17 @@
     function finishThanks() {
       hideSendError();
       hideCapModal();
+      const nothing = state.type === "nothing-this-week";
+      const title = $("thanks-title");
+      const body = $("thanks-body");
+      if (title) title.textContent = nothing ? "Thanks for checking in." : "Thanks for sharing this week.";
+      if (body) {
+        body.textContent = nothing
+          ? "Even a quiet week helps us know what you're seeing. We'll check in again next week."
+          : "Your story helps shape what Sedona shares. We'll check in again next week.";
+      }
+      const signoff = $("thanks-signoff");
+      if (signoff) signoff.textContent = "Until next time.";
       showView("thanks");
     }
     function nothingNew() {
@@ -1661,10 +1874,100 @@
     bindDictation($("dictate-story"), $("story"), null, null);
     bindDictation($("dictate-scenario"), $("scenario"), $("scenario-interim"), $("scenario-mic-hint"));
 
+    const GREET_KEY = "sedonaGreetingPlayed";
+    const HELLOS = ["Hi", "Hey", "What's up"];
+    function prefersReducedMotion() {
+      return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+    function greetingAlreadyPlayed() {
+      try { return sessionStorage.getItem(GREET_KEY) === "1"; } catch (err) { return false; }
+    }
+    function markGreetingPlayed() {
+      try { sessionStorage.setItem(GREET_KEY, "1"); } catch (err) {}
+    }
+    function pickHello(email) {
+      if (!email) return "Hey";
+      let hash = 0;
+      for (let i = 0; i < email.length; i++) hash = (hash * 31 + email.charCodeAt(i)) >>> 0;
+      return HELLOS[hash % HELLOS.length];
+    }
+    function setGreetingText(email) {
+      const el = $("greeting-text");
+      if (!el) return;
+      el.textContent = "";
+      const line = document.createElement("span");
+      if (!email) {
+        line.textContent = "Hey there";
+        el.appendChild(line);
+        return;
+      }
+      const hello = pickHello(email);
+      const prefix = hello === "What's up" ? "What's up," : hello;
+      line.appendChild(document.createTextNode(prefix));
+      const em = document.createElement("span");
+      em.className = "greeting-email";
+      em.textContent = email;
+      line.appendChild(em);
+      el.appendChild(line);
+    }
+    let greetingClosed = false;
+    function dismissGreeting() {
+      const root = document.documentElement;
+      if (greetingClosed || !root.classList.contains("is-greeting")) {
+        root.classList.remove("is-greeting", "is-greeting-out", "is-greeting-mid");
+        return;
+      }
+      greetingClosed = true;
+      const overlay = $("greeting-overlay");
+      const reduced = prefersReducedMotion();
+      const btn = $("greeting-continue");
+      if (btn) btn.disabled = true;
+      function done() {
+        root.classList.remove("is-greeting", "is-greeting-out", "is-greeting-mid");
+        if (overlay) overlay.setAttribute("aria-hidden", "true");
+        markGreetingPlayed();
+      }
+      root.classList.add("is-greeting-out");
+      setTimeout(done, reduced ? 220 : 700);
+    }
+    function startGreeting() {
+      const shotName = params.get("shot") || "";
+      const force = shotName.indexOf("greeting") === 0 || params.get("greet") === "1";
+      const email = sanitizeEmail(params.get("u"));
+      if (shotName && shotName.indexOf("greeting") !== 0) {
+        document.documentElement.classList.remove("is-greeting", "is-greeting-out", "is-greeting-mid");
+        return;
+      }
+      if (!force && greetingAlreadyPlayed()) {
+        document.documentElement.classList.remove("is-greeting", "is-greeting-out", "is-greeting-mid");
+        return;
+      }
+      setGreetingText(email);
+      document.documentElement.classList.add("is-greeting");
+      const overlay = $("greeting-overlay");
+      const btn = $("greeting-continue");
+      if (overlay) overlay.setAttribute("aria-hidden", "false");
+      if (btn) {
+        btn.addEventListener("click", function (ev) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          dismissGreeting();
+        });
+        const delay = prefersReducedMotion() ? 220 : 540;
+        setTimeout(function () {
+          try { btn.focus(); } catch (err) {}
+        }, delay);
+      }
+      if (shotName === "greeting-mid") {
+        document.documentElement.classList.add("is-greeting-mid");
+      }
+    }
+    startGreeting();
+
     const OPEN_DEMO = "A warehouse order sat another week because the starting pay is below what people can get at plants nearby. Two good pickers took other work while the hiring manager thought it over.";
     const shot = params.get("shot");
     if (shot) {
-      if (shot !== "choose") {
+      if (shot !== "choose" && String(shot).indexOf("greeting") !== 0) {
         $("name").value = "Jordan";
         $("office").value = "Clinton, IA";
       }
