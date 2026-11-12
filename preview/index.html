@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#2D2E32" />
+  <meta name="description" content="Sedona Staffing weekly recruiter check-in." />
+  <title>Weekly Signal | Sedona Staffing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --yellow: #FFD000;
+      --cta: #EDCA2F;
+      --cta-hover: #D1B32B;
+      --charcoal: #2D2E32;
+      --body: #58595B;
+      --teal-dark: #08485D;
+      --light: #EFEFEF;
+      --border: #dedede;
+      --white: #FFFFFF;
+      --black: #000000;
+      --font-ui: "Work Sans", system-ui, -apple-system, sans-serif;
+      --font-body: "Source Sans 3", "Source Sans Pro", "Work Sans", system-ui, sans-serif;
+      --pill: 25px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      color: var(--body);
+      background: var(--white);
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+    header.top { background: var(--charcoal); color: var(--white); }
+    .header-inner, .shell, footer.fine {
+      max-width: 760px;
+      margin: 0 auto;
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 68px;
+    }
+    .brand {
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 20px;
+    }
+    .brand span { color: var(--yellow); }
+    .header-meta {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.75);
+    }
+    .shell { padding-top: 48px; padding-bottom: 64px; }
+    h1 {
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 2rem;
+      line-height: 1.2;
+      color: var(--charcoal);
+      margin: 0 0 12px;
+    }
+    h1[tabindex="-1"]:focus { outline: none; }
+    .eyebrow {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+      margin: 0 0 8px;
+    }
+    .lede { margin: 0 0 28px; }
+    .id-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    label.field {
+      display: block;
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--charcoal);
+      margin: 0 0 6px;
+    }
+    input[type="text"], select, textarea {
+      width: 100%;
+      font: inherit;
+      color: var(--charcoal);
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 12px 14px;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: 3px solid rgba(53,163,191,.35);
+      border-color: #35A3BF;
+    }
+    .mode-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    @media (max-width: 900px) { .mode-grid { grid-template-columns: 1fr; } }
+    .mode-card {
+      appearance: none;
+      text-align: left;
+      cursor: pointer;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 20px 18px;
+      min-height: 148px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      color: inherit;
+    }
+    .mode-card h2 {
+      font-family: var(--font-ui);
+      font-size: 1.25rem;
+      color: var(--charcoal);
+      margin: 0;
+    }
+    .mode-card p { margin: 0; }
+    .mode-card.recommended { box-shadow: inset 4px 0 0 var(--yellow); }
+    .mode-card:hover, .mode-card:focus-visible { border-color: #35A3BF; outline: none; }
+    .badge {
+      align-self: flex-start;
+      background: var(--yellow);
+      color: var(--charcoal);
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      border-radius: var(--pill);
+      padding: 3px 10px;
+    }
+    textarea.story { min-height: 220px; resize: vertical; }
+    textarea.short { min-height: 100px; resize: vertical; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--charcoal);
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: var(--pill);
+      cursor: pointer;
+    }
+    .chip[aria-checked="true"], .chip.active {
+      background: var(--yellow);
+      border-color: var(--yellow);
+      font-weight: 700;
+    }
+    .chip:focus-visible { outline: 3px solid rgba(53,163,191,.45); outline-offset: 2px; }
+    .chip-group-label {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+      margin: 18px 0 8px;
+    }
+    .heat { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; max-width: 360px; }
+    .heat button {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: 4px;
+      padding: 12px 0;
+      cursor: pointer;
+      font-family: var(--font-ui);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+    .heat button[aria-checked="true"] { background: var(--yellow); border-color: var(--yellow); }
+    .heat-caption { font-size: 15px; margin: 8px 0 0; color: var(--charcoal); min-height: 1.3em; }
+    details.more {
+      margin: 24px 0 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+    details.more summary {
+      cursor: pointer;
+      font-family: var(--font-ui);
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+    .consent { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 28px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 0 28px;
+      border: 0;
+      border-radius: var(--pill);
+      background: var(--cta);
+      color: var(--black);
+      font-family: var(--font-ui);
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      box-shadow: 1px 1px 3px rgba(0,0,0,.55);
+      cursor: pointer;
+    }
+    .btn:hover { background: var(--cta-hover); }
+    .btn:focus-visible { outline: 3px solid rgba(53,163,191,.45); outline-offset: 2px; }
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: wait;
+      box-shadow: none;
+    }
+    .send-error {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border: 1px solid #c45c4a;
+      background: #fdf4f2;
+      color: var(--charcoal);
+    }
+    .send-error p { margin: 0 0 10px; }
+    .send-error a.btn { text-decoration: none; }
+    .cap-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(45, 46, 50, 0.62);
+    }
+    .cap-modal[hidden] { display: none !important; }
+    .cap-modal-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 28px 24px 24px;
+      box-shadow: 1px 1px 3px rgba(0,0,0,.25);
+    }
+    .cap-modal-card p {
+      margin: 0 0 20px;
+      font-size: 18px;
+      line-height: 1.5;
+      color: var(--charcoal);
+    }
+    .btn-secondary {
+      background: transparent;
+      box-shadow: none;
+      letter-spacing: 0;
+      color: var(--charcoal);
+    }
+    .btn-secondary:hover { background: var(--light); }
+    .btn-quiet {
+      background: none;
+      border: 0;
+      color: var(--teal-dark);
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 8px 0;
+    }
+    .switch-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .payoff {
+      background: #FFF8D6;
+      border-left: 4px solid var(--yellow);
+      border-radius: 4px;
+      padding: 18px 20px;
+      margin: 8px 0 20px;
+      color: var(--charcoal);
+    }
+
+    .tp-card {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 16px 18px;
+      margin: 0 0 16px;
+      background: var(--white);
+    }
+    .tp-prompt {
+      font-family: var(--font-ui);
+      font-weight: 700;
+      color: var(--charcoal);
+      margin: 0 0 8px;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+    .tp-stat {
+      font-size: 14px;
+      color: var(--body);
+      margin: 0 0 6px;
+      line-height: 1.45;
+    }
+    .tp-source {
+      font-size: 13px;
+      margin: 0 0 12px;
+    }
+    .tp-source a { color: var(--teal-dark); }
+    .tp-card .field { margin-top: 10px; }
+    .kpi-section {
+      margin: 24px 0 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+    }
+    .kpi-item { margin: 0 0 18px; }
+    .kpi-item .field { margin-bottom: 8px; }
+    .kpi-error {
+      margin: 8px 0 0;
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      color: #9a2f22;
+    }
+    .kpi-item.is-error .stepper input,
+    .kpi-item.is-error input[type="text"],
+    .kpi-item.is-error textarea.short {
+      border-color: #c45c4a;
+    }
+    .kpi-item.is-error .stepper input:focus,
+    .kpi-item.is-error input[type="text"]:focus,
+    .kpi-item.is-error textarea.short:focus {
+      outline: 3px solid rgba(196,92,74,.35);
+      border-color: #c45c4a;
+    }
+    .kpi-item.is-error .chips {
+      outline: 2px solid #c45c4a;
+      outline-offset: 3px;
+      border-radius: var(--pill);
+    }
+    .stepper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      max-width: 240px;
+    }
+    .stepper input[type="number"] {
+      width: 88px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      -moz-appearance: textfield;
+      padding: 12px 8px;
+    }
+    .stepper input[type="number"]::-webkit-outer-spin-button,
+    .stepper input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .stepper-btn {
+      appearance: none;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--charcoal);
+      font-family: var(--font-ui);
+      font-size: 22px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .stepper-btn:hover { border-color: #35A3BF; }
+    .stepper-btn:focus-visible { outline: 3px solid rgba(53,163,191,.45); outline-offset: 2px; }
+    #share-learn-note-wrap { margin-top: 12px; }
+    html.shot-kpi header.top,
+    html.shot-kpi #identity-block,
+    html.shot-kpi #closed-banner,
+    html.shot-kpi .switch-row,
+    html.shot-kpi #write-title,
+    html.shot-kpi #tp-intro,
+    html.shot-kpi #tp-week-label,
+    html.shot-kpi #talking-points,
+    html.shot-kpi #guided-form > .chip-group-label,
+    html.shot-kpi .actions,
+    html.shot-kpi footer.fine {
+      display: none !important;
+    }
+    html.shot-kpi .shell { padding-top: 16px; padding-bottom: 24px; }
+    html.shot-kpi .kpi-section { margin-top: 0; border-top: 0; padding-top: 0; }
+    footer.fine { padding-bottom: 32px; font-size: 13px; }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      background: var(--charcoal);
+      color: var(--white);
+      padding: 10px 16px;
+      border-radius: var(--pill);
+      font-family: var(--font-ui);
+      font-size: 14px;
+      display: none;
+      z-index: 50;
+    }
+    .toast.show { display: block; }
+    .view { display: none; }
+    .view.active { display: block; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    .honeypot {
+      position: absolute;
+      left: -10000px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .closed-banner {
+      margin: 0 0 24px;
+      padding: 14px 16px;
+      border: 1px solid #c4a024;
+      background: #FFF8E0;
+      color: var(--charcoal);
+    }
+    .closed-banner p { margin: 0; }
+    .closed-banner[hidden] { display: none !important; }
+
+    textarea.scenario { min-height: 320px; resize: vertical; }
+    .dictate-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 14px;
+      margin: 10px 0 0;
+    }
+    .mic-btn {
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--charcoal);
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: var(--pill);
+      cursor: pointer;
+    }
+    .mic-btn svg { width: 16px; height: 16px; fill: currentColor; }
+    .mic-btn.listening {
+      background: var(--cta);
+      border-color: var(--cta);
+    }
+    .mic-btn:focus-visible { outline: 3px solid rgba(53,163,191,.45); outline-offset: 2px; }
+    .dictate-hint { margin: 0; font-size: 14px; color: var(--body); }
+    .dictate-live {
+      margin: 8px 0 0;
+      min-height: 1.4em;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--teal-dark);
+    }
+    @media (max-width: 700px) {
+      .header-inner, .shell, footer.fine { padding-left: 20px; padding-right: 20px; }
+      .id-grid { grid-template-columns: 1fr; }
+    }
+
+    html.is-greeting,
+    html.is-greeting body {
+      overflow: hidden;
+      height: 100%;
+    }
+    #greeting-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 28px 40px;
+      background:
+        radial-gradient(ellipse at 18% 0%, rgba(53,163,191,.38), transparent 55%),
+        linear-gradient(165deg, #08485D 0%, #0A3A4A 42%, #2D2E32 100%);
+      color: var(--white);
+      text-align: center;
+      cursor: pointer;
+    }
+    html.is-greeting #greeting-overlay { display: flex; }
+    .greeting-inner { max-width: 22rem; }
+    .greeting-brand {
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: .02em;
+      margin: 0 0 22px;
+      opacity: .92;
+    }
+    .greeting-brand span { color: var(--yellow); }
+    .greeting-mark {
+      width: 48px;
+      height: 4px;
+      border-radius: 4px;
+      background: var(--yellow);
+      margin: 0 auto 22px;
+    }
+    .greeting-text {
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: clamp(1.7rem, 8vw, 2.25rem);
+      line-height: 1.25;
+      color: var(--white);
+      margin: 0;
+    }
+    .greeting-email {
+      display: block;
+      margin-top: 12px;
+      color: var(--yellow);
+      font-size: clamp(1.02rem, 4.5vw, 1.22rem);
+      line-height: 1.35;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .greeting-hint {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.62);
+      margin: 28px 0 0;
+    }
+    html.is-greeting #greeting-overlay .greeting-inner {
+      animation: greet-in 520ms ease both;
+    }
+    html.is-greeting-out #greeting-overlay {
+      animation: greet-out 640ms ease forwards;
+    }
+    html.is-greeting-out #greeting-overlay .greeting-inner {
+      animation: greet-inner-out 640ms ease forwards;
+    }
+    html.is-greeting-mid #greeting-overlay {
+      animation: none;
+      opacity: .62;
+      transform: translateY(-18%);
+    }
+    html.is-greeting-mid #greeting-overlay .greeting-inner {
+      animation: none;
+    }
+    @keyframes greet-in {
+      from { opacity: 0; transform: translateY(18px) scale(.98); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes greet-out {
+      to { opacity: 0; transform: translateY(-28px); }
+    }
+    @keyframes greet-inner-out {
+      to { opacity: 0; transform: translateY(-12px); }
+    }
+    @keyframes greet-fade-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes greet-fade-out { to { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html.is-greeting #greeting-overlay .greeting-inner {
+        animation: greet-fade-in 200ms ease both;
+      }
+      html.is-greeting-out #greeting-overlay {
+        animation: greet-fade-out 200ms ease forwards;
+      }
+      html.is-greeting-out #greeting-overlay .greeting-inner { animation: none; }
+      html.is-greeting-mid #greeting-overlay {
+        opacity: .55;
+        transform: none;
+      }
+    }
+  </style>
+  <script>
+  /* Show the greeting overlay before first paint when it should play. */
+  (function () {
+    try {
+      var search = location.search || "";
+      var match = /(?:^|[?&])shot=([^&]*)/.exec(search);
+      var shot = match ? decodeURIComponent(match[1].replace(/\+/g, " ")) : "";
+      if (shot && shot.indexOf("greeting") !== 0) return;
+      if (shot.indexOf("greeting") !== 0 && sessionStorage.getItem("sedonaGreetingPlayed") === "1") return;
+      document.documentElement.classList.add("is-greeting");
+    } catch (err) {}
+  })();
+  </script>
+</head>
+
+<body>
+  <div id="greeting-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="greeting-text">
+    <div class="greeting-inner">
+      <p class="greeting-brand">Sedona <span>Staffing</span></p>
+      <div class="greeting-mark" aria-hidden="true"></div>
+      <p class="greeting-text" id="greeting-text">Hey there</p>
+      <p class="greeting-hint">Tap to continue</p>
+    </div>
+  </div>
+
+  <header class="top">
+    <div class="header-inner">
+      <div class="brand">Sedona <span>Staffing</span></div>
+      <div class="header-meta" id="checkin-label">Weekly check-in</div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div class="closed-banner" id="closed-banner" hidden>
+      <p>This week's check-in is closed. A new one opens Thursday.</p>
+    </div>
+    <div class="honeypot" aria-hidden="true">
+      <label for="website">Company website</label>
+      <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      <label for="botcheck">I am a bot</label>
+      <input id="botcheck" name="botcheck" type="checkbox" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div id="identity-block">
+      <div class="id-grid">
+        <div>
+          <label class="field" for="name">First name</label>
+          <input id="name" type="text" autocomplete="off" maxlength="40" />
+        </div>
+        <div>
+          <label class="field" for="office">Office</label>
+          <select id="office" autocomplete="off"><option value="">Select your office</option></select>
+        </div>
+      </div>
+      <input type="hidden" id="recipient-email" name="recipient_email" value="" autocomplete="off" />
+    </div>
+
+    <section class="view active" id="view-choose" aria-labelledby="choose-title">
+      <p class="eyebrow" id="choose-eyebrow">Weekly check-in</p>
+      <h1 id="choose-title">What happened this week?</h1>
+      <p class="lede">Your notes help fuel Sedona’s marketing and content engine.</p>
+      <div class="mode-grid">
+        <button type="button" class="mode-card recommended" id="pick-open">
+          <span class="badge">Recommended</span>
+          <h2>Write a note</h2>
+          <p>Anything specific from your market, in your own words.</p>
+        </button>
+        <button type="button" class="mode-card" id="pick-guided">
+          <h2>Guided</h2>
+          <p>Three or four industry points. Add what you are seeing locally.</p>
+        </button>
+        <button type="button" class="mode-card" id="pick-scenario">
+          <h2>Scenario</h2>
+          <p>Describe a situation from this week, in detail. It may be turned into an animation.</p>
+        </button>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn-quiet" id="nothing-new">Nothing new this week</button>
+      </div>
+    </section>
+
+    <section class="view" id="view-write" aria-labelledby="write-title">
+      <div class="switch-row">
+        <p class="eyebrow" id="write-eyebrow"></p>
+        <button type="button" class="btn-quiet" id="switch-mode">Switch mode</button>
+      </div>
+      <h1 id="write-title"></h1>
+
+      <div id="open-form">
+        <label class="field" for="story">Your note</label>
+        <textarea class="story" id="story" maxlength="2500" placeholder="What occurred this week?"></textarea>
+        <button type="button" class="btn-quiet" id="dictate-story" hidden>Use voice dictation</button>
+        <details class="more" id="open-details">
+          <summary>Add details (optional)</summary>
+          <p class="chip-group-label">Need a starting line?</p>
+          <div class="chips" id="sparks"></div>
+          <p class="chip-group-label">About</p>
+          <div class="chips" id="about-chips" role="radiogroup" aria-label="About"></div>
+          <p class="chip-group-label">Friction</p>
+          <div class="chips" id="open-friction" role="radiogroup" aria-label="Friction"></div>
+          <div id="open-friction-other-wrap" hidden>
+            <label class="field" for="open-friction-other" style="margin-top:12px">What is the friction?</label>
+            <input id="open-friction-other" type="text" maxlength="80" autocomplete="off" />
+          </div>
+          <p class="chip-group-label">How things felt</p>
+          <div class="heat" id="open-heat" role="radiogroup" aria-label="How things felt"></div>
+          <p class="heat-caption" id="open-heat-caption"></p>
+          <p class="chip-group-label">Placement win</p>
+          <label class="field" for="open-win-story">The story in two sentences</label>
+          <textarea class="short" id="open-win-story" maxlength="500"></textarea>
+          <p class="field">How should we use this?</p>
+          <div class="consent" role="radiogroup" aria-label="Consent" id="open-consent">
+            <button type="button" class="chip" data-consent="public-anonymized" data-scope="open">Public, with details changed</button>
+            <button type="button" class="chip" data-consent="internal" data-scope="open">Internal only</button>
+          </div>
+        </details>
+      </div>
+
+      <div id="guided-form" hidden>
+        <p class="chip-group-label">This week’s industry talking points</p>
+        <p class="fine" id="tp-intro" style="margin:-4px 0 8px;">Each one is a national or industry snapshot. Add your local, unique experience.</p>
+        <p class="fine" id="tp-week-label" style="margin:-4px 0 14px;"></p>
+        <div id="talking-points"></div>
+        <div class="kpi-section" id="guided-kpis">
+          <p class="chip-group-label">This week’s numbers</p>
+          <p class="fine" style="margin:-4px 0 14px;">These questions stay the same every week and are required in Guided. Enter a number (0 is fine) or take a short tap.</p>
+
+          <div class="kpi-item" data-kpi="ncns_count">
+            <label class="field" for="kpi-ncns">How many no-call no-shows did you have this week?</label>
+            <div class="stepper">
+              <button type="button" class="stepper-btn" data-stepper="kpi-ncns" data-dir="-1" aria-label="Decrease no-call no-shows">−</button>
+              <input id="kpi-ncns" type="number" inputmode="numeric" min="0" step="1" max="999" autocomplete="off" aria-describedby="err-kpi-ncns" />
+              <button type="button" class="stepper-btn" data-stepper="kpi-ncns" data-dir="1" aria-label="Increase no-call no-shows">+</button>
+            </div>
+            <p class="kpi-error" id="err-kpi-ncns" hidden>Enter a number. 0 is fine if you had none.</p>
+          </div>
+
+          <div class="kpi-item" data-kpi="placements_count">
+            <label class="field" for="kpi-placements">How many new placements or starts did you have this week?</label>
+            <div class="stepper">
+              <button type="button" class="stepper-btn" data-stepper="kpi-placements" data-dir="-1" aria-label="Decrease placements">−</button>
+              <input id="kpi-placements" type="number" inputmode="numeric" min="0" step="1" max="999" autocomplete="off" aria-describedby="err-kpi-placements" />
+              <button type="button" class="stepper-btn" data-stepper="kpi-placements" data-dir="1" aria-label="Increase placements">+</button>
+            </div>
+            <p class="kpi-error" id="err-kpi-placements" hidden>Enter a number. 0 is fine if you had none.</p>
+          </div>
+
+          <div class="kpi-item" data-kpi="open_orders_hard">
+            <label class="field" for="kpi-open-orders">How many open orders are you struggling to fill?</label>
+            <div class="stepper">
+              <button type="button" class="stepper-btn" data-stepper="kpi-open-orders" data-dir="-1" aria-label="Decrease hard-to-fill orders">−</button>
+              <input id="kpi-open-orders" type="number" inputmode="numeric" min="0" step="1" max="999" autocomplete="off" aria-describedby="err-kpi-open-orders" />
+              <button type="button" class="stepper-btn" data-stepper="kpi-open-orders" data-dir="1" aria-label="Increase hard-to-fill orders">+</button>
+            </div>
+            <p class="kpi-error" id="err-kpi-open-orders" hidden>Enter a number. 0 is fine if you had none.</p>
+          </div>
+
+          <div class="kpi-item" data-kpi="hardest_role">
+            <label class="field" for="kpi-hardest-role">Hardest role to fill this week</label>
+            <input id="kpi-hardest-role" type="text" maxlength="80" autocomplete="off" placeholder="Short title is enough" aria-describedby="err-kpi-hardest-role" />
+            <p class="kpi-error" id="err-kpi-hardest-role" hidden>Add the hardest role to fill this week.</p>
+          </div>
+
+          <div class="kpi-item" data-kpi="ttf_trend">
+            <p class="field" id="ttf-trend-label">Average time-to-fill this week</p>
+            <div class="chips" id="ttf-trend" role="radiogroup" aria-labelledby="ttf-trend-label" aria-describedby="err-kpi-ttf">
+              <button type="button" class="chip" role="radio" aria-checked="false" data-ttf="faster">Faster</button>
+              <button type="button" class="chip" role="radio" aria-checked="false" data-ttf="same">Same</button>
+              <button type="button" class="chip" role="radio" aria-checked="false" data-ttf="slower">Slower</button>
+            </div>
+            <p class="kpi-error" id="err-kpi-ttf" hidden>Choose faster, same, or slower.</p>
+          </div>
+
+          <div class="kpi-item" data-kpi="share_learn">
+            <p class="field" id="share-learn-label">Did you try something or learn something this week that others should know?</p>
+            <div class="chips" id="share-learn" role="radiogroup" aria-labelledby="share-learn-label" aria-describedby="err-kpi-share-learn">
+              <button type="button" class="chip" role="radio" aria-checked="false" data-share-learn="yes">Yes</button>
+              <button type="button" class="chip" role="radio" aria-checked="false" data-share-learn="no">No</button>
+            </div>
+            <p class="kpi-error" id="err-kpi-share-learn" hidden>Choose yes or no.</p>
+            <div id="share-learn-note-wrap" hidden>
+              <label class="field" for="share-learn-note">What did you try or learn?</label>
+              <textarea class="short" id="share-learn-note" maxlength="500" placeholder="A couple of sentences is enough." aria-describedby="err-kpi-share-learn-note"></textarea>
+              <p class="kpi-error" id="err-kpi-share-learn-note" hidden>Add a short note about what you tried or learned.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="scenario-form" hidden>
+        <p class="lede" id="scenario-instructions">Describe, in as much detail as possible, a scenario that happened this week. Who was involved, where it happened, what went wrong or right, and how it ended. This scenario may be turned into an animation.</p>
+        <label class="field" for="scenario">This week’s scenario</label>
+        <textarea class="scenario" id="scenario" maxlength="8000" placeholder="Who was involved, where it happened, what went wrong or right, and how it ended."></textarea>
+        <div class="dictate-row">
+          <button type="button" class="mic-btn" id="dictate-scenario" hidden aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg>
+            <span class="mic-label">Start dictation</span>
+          </button>
+          <p class="dictate-hint" id="scenario-mic-hint" hidden>You can also use the microphone on your keyboard.</p>
+        </div>
+        <p class="dictate-live" id="scenario-interim" aria-live="polite"></p>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn" id="send-btn">Send</button>
+        <button type="button" class="btn btn-secondary" id="copy-btn">Copy instead</button>
+        <button type="button" class="btn-quiet" id="nothing-new-2">Nothing new this week</button>
+      </div>
+    </section>
+
+    <section class="view" id="view-thanks" aria-labelledby="thanks-title">
+      <p class="eyebrow">Thank you</p>
+      <h1 id="thanks-title">Thanks, this helps shape what we share.</h1>
+      <div class="payoff">Your notes help fuel Sedona’s marketing and content engine.</div>
+      <div class="actions">
+        <button type="button" class="btn" id="copy-again">Copy your note</button>
+        <button type="button" class="btn btn-secondary" id="start-over">Start over</button>
+      </div>
+    </section>
+
+    <div class="send-error" id="send-error" hidden>
+      <p id="send-error-text">We couldn’t send that just now. Your note is still here.</p>
+      <div class="actions" style="margin-top:4px">
+        <button type="button" class="btn" id="try-again-btn">Try again</button>
+        <a class="btn btn-secondary" id="mailto-fallback" href="mailto:brett@barrandcompany.co">Send by email instead</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="fine">First name and office only. Please do not include last names or client names.</footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="cap-modal" id="cap-modal" hidden role="dialog" aria-modal="true" aria-describedby="cap-modal-text">
+    <div class="cap-modal-card">
+      <p id="cap-modal-text">Max submission cap limit reached, please disregard until the start of the next month.</p>
+      <button type="button" class="btn" id="cap-modal-close">OK</button>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    const CONFIG = {
+      submitUrl: "https://api.web3forms.com/submit",
+      accessKey: "c6554a1b-e643-4614-bdd0-078c46598681",
+      fallbackMailto: "mailto:brett@barrandcompany.co",
+      fromName: "Sedona Weekly Signal",
+      checkInDay: ""
+    };
+
+    const WEEK_CONFIG = /*WEEK_CONFIG*/{
+  "week": "2026-W46",
+  "week_label": "November 9–15, 2026",
+  "talking_points": [
+    {
+      "id": "tp1",
+      "stat": "U.S. employers added 165,000 jobs in October, and the unemployment rate was 4.1%. Transportation and warehousing added 25,000 jobs; manufacturing added 19,000.",
+      "source_label": "BLS Employment Situation, October 2026 (released Nov 6)",
+      "source_url": "https://www.bls.gov/news.release/empsit.nr0.htm",
+      "prompt": "Nationally, employers added 165,000 jobs in October and unemployment was 4.1%, with gains in transportation, warehousing, and manufacturing. What are you seeing locally?"
+    },
+    {
+      "id": "tp2",
+      "stat": "4.8 million people were working part time for economic reasons in October, up 339,000 from September.",
+      "source_label": "BLS Employment Situation, October 2026, Table A-8",
+      "source_url": "https://www.bls.gov/news.release/empsit.nr0.htm",
+      "prompt": "Nationally, 4.8 million people were working part time for economic reasons in October, up 339,000 from September. What are you seeing locally — are people asking you for more hours or full-time work?"
+    },
+    {
+      "id": "tp3",
+      "stat": "As of September 30, seasonal job postings on Indeed were up about 10% from a year ago. Warehouse loading and stocking roles now make up about 9% of seasonal postings, up from 3.5% in 2019.",
+      "source_label": "Indeed Hiring Lab, Seasonal Hiring Is Off to a Fast Start (Oct 15, 2026)",
+      "source_url": "https://hiringlab.indeed.com/2026/10/15/seasonal-hiring-is-off-to-a-fast-start/",
+      "prompt": "Nationally, seasonal job postings on Indeed were up about 10% from a year ago, and warehouse roles now make up about 9% of those postings. What are you seeing locally?"
+    },
+    {
+      "id": "tp4",
+      "stat": "There were 7.5 million job openings in September (a 4.5% openings rate), little changed from August.",
+      "source_label": "BLS JOLTS, September 2026 (released Nov 3)",
+      "source_url": "https://www.bls.gov/news.release/jolts.nr0.htm",
+      "prompt": "Nationally, there were still 7.5 million job openings in September. What are you seeing locally — are clients moving faster on the people you send, or still sitting on candidates?"
+    }
+  ]
+}/*END_WEEK_CONFIG*/;
+
+    const OFFICES = [
+      "Moline, IL (Headquarters)","Rock Falls, IL",
+      "Clinton, IA","Maquoketa, IA","Muscatine, IA",
+      "San Diego, CA","Collierville, TN",
+      "I work across multiple offices","Corporate / marketing / other","Test"
+    ];
+    const OFFICE_KEYS = {
+      "moline": "Moline, IL (Headquarters)",
+      "rock-falls": "Rock Falls, IL",
+      "clinton": "Clinton, IA",
+      "maquoketa": "Maquoketa, IA",
+      "muscatine": "Muscatine, IA",
+      "san-diego": "San Diego, CA",
+      "collierville": "Collierville, TN",
+      "multi": "I work across multiple offices",
+      "corporate": "Corporate / marketing / other",
+      "test": "Test"
+    };
+    const ROLES = [
+      { group: "Industrial", items: [
+        "Warehouse / material handling","Production / assembly / machine operator",
+        "Forklift / powered industrial truck","Shipping, receiving, or inventory",
+        "Maintenance or skilled trades","Welding or fabrication",
+        "Quality or inspection","CDL, driver, or delivery"
+      ]},
+      { group: "Office", items: [
+        "Administrative / office support","Customer service / call center","Accounting or clerical"
+      ]},
+      { group: "Technical", items: [
+        "Engineering, design, or CAD","IT or technical support"
+      ]},
+      { group: "Other", items: ["Other"] }
+    ];
+    const FRICTIONS = [
+      { id: "pay", label: "Pay" },
+      { id: "shift", label: "Shift" },
+      { id: "skills", label: "Skills" },
+      { id: "transportation", label: "Transportation" },
+      { id: "no-shows", label: "No-shows" },
+      { id: "competing-offers", label: "Competing offers" },
+      { id: "background-drug", label: "Background / drug" },
+      { id: "other", label: "Other" }
+    ];
+    const ABOUT = [
+      { id: "candidate", label: "Candidate" },
+      { id: "client", label: "Client" },
+      { id: "market", label: "Market" },
+      { id: "internal", label: "Internal" }
+    ];
+    const HEAT = {
+      1: "Mild",
+      2: "Noticeable",
+      3: "Significant",
+      4: "Severe",
+      5: "Blocking"
+    };
+    const QUESTIONS = [
+      { id: "RQ01", tag: "FAQ", prompt: "What is one question job seekers asked you more than once this week? Write it the way they asked it." },
+      { id: "RQ02", tag: "FAQ", prompt: "What is one question hiring managers asked you more than once this week? Write it the way they asked it." },
+      { id: "RQ03", tag: "FAQ", prompt: "What do candidates ask about pay, benefits, or when they get paid that we should answer in public?" },
+      { id: "RQ04", tag: "FAQ", prompt: "What do new applicants still not understand about the first visit or the first day?" },
+      { id: "RQ05", tag: "myth-buster", prompt: "What is one thing candidates keep getting wrong about working with Sedona or with staffing agencies in general?" },
+      { id: "RQ06", tag: "myth-buster", prompt: "What is one myth employers still believe about using a staffing partner?" },
+      { id: "RQ07", tag: "myth-buster", prompt: "What do people still get wrong about temp, temp-to-hire, or direct hire?" },
+      { id: "RQ08", tag: "myth-buster", prompt: "What is one rumor about pay, fees, or “the agency takes a cut” that you had to correct this week?" },
+      { id: "RQ09", tag: "advice", prompt: "What is one piece of advice you found yourself giving to multiple candidates this week?" },
+      { id: "RQ10", tag: "advice", prompt: "What is the most useful thing you told a candidate to do before an interview this week?" },
+      { id: "RQ11", tag: "advice", prompt: "What should a candidate do in the first week on assignment that most people skip?" },
+      { id: "RQ12", tag: "advice", prompt: "What is one thing you wish job seekers would put on, or take off, their application this week?" },
+      { id: "RQ13", tag: "employer insight", prompt: "What is one thing an employer said this week that stuck with you, good or bad? No company names." },
+      { id: "RQ14", tag: "employer insight", prompt: "What slowed a client down this week that they may not realize is costing them candidates? No company names." },
+      { id: "RQ15", tag: "employer insight", prompt: "What was the biggest hiring-process mistake you saw a client make this week? No company names." },
+      { id: "RQ16", tag: "employer insight", prompt: "When a job order filled faster than usual this week, what did the employer do right? No company names." },
+      { id: "RQ17", tag: "candidate story", prompt: "Tell us about a job seeker who impressed you this week. What did they do? First name only, or skip the name." },
+      { id: "RQ18", tag: "candidate story", prompt: "What was the biggest mistake you saw a candidate make this week, and why did it matter?" },
+      { id: "RQ19", tag: "candidate story", prompt: "What made a candidate get chosen over others this week? Keep it specific. No last names." },
+      { id: "RQ20", tag: "recruiter POV", prompt: "What frustrated you about hiring or staffing this week that candidates or clients do not usually see?" },
+      { id: "RQ21", tag: "recruiter POV", prompt: "What is one thing you learned this week that you did not know a month ago?" },
+      { id: "RQ22", tag: "recruiter POV", prompt: "What conversation this week changed how you are thinking about a role or a situation? No client names." },
+      { id: "RQ23", tag: "recruiter POV", prompt: "If you could change one thing about how people apply or interview this week, what would it be?" },
+      { id: "RQ24", tag: "recruiter POV", prompt: "What are you seeing in no-shows, first-week drop-off, or last-minute turndowns this week?" },
+      { id: "RQ25", tag: "FAQ", prompt: "What do people ask about background checks, drug screens, or starting paperwork?" },
+      { id: "RQ26", tag: "employer insight", prompt: "Are starting-pay expectations matching the order this week? If not, which way are they off, and on what kind of role?" },
+      { id: "RQ27", tag: "advice", prompt: "What would you tell someone who wants more hours, or wants to move from part-time to full-time, based on what you saw this week?" },
+      { id: "RQ28", tag: "candidate story", prompt: "Who showed up ready this week, and what did “ready” look like? First name only, or skip the name." }
+    ];
+    const ROTATION = [
+      "RQ05","RQ09","RQ13","RQ01","RQ17","RQ20",
+      "RQ15","RQ21","RQ07","RQ18","RQ02","RQ26",
+      "RQ03","RQ10","RQ06","RQ28","RQ22","RQ14",
+      "RQ04","RQ11","RQ08","RQ19","RQ23","RQ16",
+      "RQ25","RQ12","RQ24","RQ27"
+    ];
+
+    const params = new URLSearchParams(location.search);
+    const state = {
+      mode: "open", type: "weekly-pulse",
+      about: "", spark_id: "",
+      role_family: "", friction: "", friction_label: "", heat: "",
+      consent: "",
+      ttf_trend: "",
+      share_learn: ""
+    };
+
+    function $(id) { return document.getElementById(id); }
+    function firstName(value) { return String(value || "").trim().split(/\s+/)[0] || ""; }
+    function checkInLabel() {
+      return CONFIG.checkInDay ? (CONFIG.checkInDay + " check-in") : "Weekly check-in";
+    }
+    function toast(msg) {
+      const el = $("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      setTimeout(function () { el.classList.remove("show"); }, 2200);
+    }
+    function chicagoParts(date) {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/Chicago", year: "numeric", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23"
+      }).formatToParts(date);
+      const g = function (t) { return parts.find(function (p) { return p.type === t; }).value; };
+      return { year: +g("year"), month: +g("month"), day: +g("day"), hour: +g("hour"), minute: +g("minute"), second: +g("second") };
+    }
+    function pad2(n) { return String(n).padStart(2, "0"); }
+    function chicagoOffsetString(date) {
+      const parts = chicagoParts(date);
+      const asUTC = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
+      const offsetMin = Math.round((asUTC - date.getTime()) / 60000);
+      const sign = offsetMin >= 0 ? "+" : "-";
+      const abs = Math.abs(offsetMin);
+      return sign + pad2(Math.floor(abs / 60)) + ":" + pad2(abs % 60);
+    }
+    function chicagoStamp(date) {
+      const p = chicagoParts(date);
+      return p.year + "-" + pad2(p.month) + "-" + pad2(p.day) + "T" +
+        pad2(p.hour) + ":" + pad2(p.minute) + ":" + pad2(p.second) + chicagoOffsetString(date);
+    }
+    function mondayUtcOfIsoWeek(weekId) {
+      const m = /^(\d{4})-W(\d{2})$/.exec(weekId || "");
+      if (!m) return null;
+      const year = +m[1], week = +m[2];
+      const jan4 = new Date(Date.UTC(year, 0, 4));
+      const dow = jan4.getUTCDay() || 7;
+      const monday1 = new Date(jan4);
+      monday1.setUTCDate(jan4.getUTCDate() - (dow - 1));
+      const monday = new Date(monday1);
+      monday.setUTCDate(monday1.getUTCDate() + (week - 1) * 7);
+      return monday;
+    }
+    function windowClosed() {
+      const weekId = (WEEK_CONFIG && WEEK_CONFIG.week) ? WEEK_CONFIG.week : "";
+      const monday = mondayUtcOfIsoWeek(weekId);
+      if (!monday) return false;
+      const closeDate = new Date(monday);
+      closeDate.setUTCDate(closeDate.getUTCDate() + 7);
+      const y = closeDate.getUTCFullYear(), mo = closeDate.getUTCMonth() + 1, d = closeDate.getUTCDate();
+      const now = chicagoParts(new Date());
+      const nowVal = (((now.year * 100 + now.month) * 100 + now.day) * 100 + now.hour) * 100 + now.minute;
+      const closeVal = (((y * 100 + mo) * 100 + d) * 100 + 8) * 100 + 0;
+      return nowVal >= closeVal;
+    }
+    function honeypotFilled() {
+      const web = $("website");
+      const box = $("botcheck");
+      return !!(web && web.value && web.value.trim()) || !!(box && box.checked);
+    }
+    function showClosed() {
+      const banner = $("closed-banner");
+      if (banner) banner.hidden = false;
+      toast("This week's check-in is closed. A new one opens Thursday.");
+    }
+    function applyClosedState() {
+      if (!windowClosed()) return false;
+      const banner = $("closed-banner");
+      if (banner) banner.hidden = false;
+      ["send-btn", "try-again-btn", "nothing-new", "nothing-new-2", "pick-open", "pick-guided", "pick-scenario"].forEach(function (id) {
+        const el = $(id);
+        if (el) el.disabled = true;
+      });
+      return true;
+    }
+    function isoWeek(year, month, day) {
+      const date = new Date(Date.UTC(year, month - 1, day));
+      const dow = date.getUTCDay() || 7;
+      date.setUTCDate(date.getUTCDate() + 4 - dow);
+      const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+      const week = Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+      return { year: date.getUTCFullYear(), week: week };
+    }
+    function pickQuestion(weekNo, override) {
+      if (override) {
+        const raw = String(override).trim().toUpperCase();
+        const id = raw.indexOf("RQ") === 0 ? raw : "RQ" + String(raw).padStart(2, "0");
+        const found = QUESTIONS.find(function (q) { return q.id === id; });
+        if (found) return found;
+      }
+      const id = ROTATION[(weekNo - 1) % ROTATION.length];
+      return QUESTIONS.find(function (q) { return q.id === id; });
+    }
+
+    const chicago = chicagoParts(new Date());
+    const iso = isoWeek(chicago.year, chicago.month, chicago.day);
+    const computedWeekId = iso.year + "-W" + String(iso.week).padStart(2, "0");
+    const isoWeekId = (WEEK_CONFIG && WEEK_CONFIG.week) ? WEEK_CONFIG.week : computedWeekId;
+    applyClosedState();
+    const question = pickQuestion(iso.week, params.get("q"));
+    $("checkin-label").textContent = checkInLabel();
+    $("choose-eyebrow").textContent = checkInLabel() + ((WEEK_CONFIG && WEEK_CONFIG.week_label) ? " · " + WEEK_CONFIG.week_label : "");
+
+    OFFICES.forEach(function (o) {
+      const opt = document.createElement("option");
+      opt.value = o; opt.textContent = o;
+      $("office").appendChild(opt);
+    });
+
+    const EMAIL_MAX = 254;
+    const EMAIL_RE = /^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$/;
+    function sanitizeEmail(raw) {
+      const value = String(raw || "").trim();
+      if (!value || value.length > EMAIL_MAX) return "";
+      if (/[<>"'`]/.test(value)) return "";
+      if (!EMAIL_RE.test(value)) return "";
+      return value;
+    }
+    function handleFromEmail(email) {
+      let local = String(email || "").split("@")[0] || "";
+      local = local.split("+")[0];
+      local = local.replace(/[._]+/g, " ").trim();
+      local = local.replace(/[^\w\s\-]/g, "").slice(0, 40).trim();
+      if (!local) return "";
+      return local.split(/\s+/).map(function (word) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }).join(" ");
+    }
+    function officeFromParam(raw) {
+      const value = String(raw || "").trim();
+      if (!value) return "";
+      const key = value.toLowerCase();
+      if (OFFICE_KEYS[key]) return OFFICE_KEYS[key];
+      if (OFFICES.indexOf(value) !== -1) return value;
+      return "";
+    }
+    function applyPrefill() {
+      const email = sanitizeEmail(params.get("u"));
+      const emailEl = $("recipient-email");
+      if (emailEl) emailEl.value = email;
+      if (email && !$("name").value) {
+        const handle = handleFromEmail(email);
+        if (handle) $("name").value = handle;
+      }
+      const office = officeFromParam(params.get("o"));
+      if (office && !$("office").value) $("office").value = office;
+    }
+    applyPrefill();
+
+    function identityReady() {
+      return !!(firstName($("name").value) && $("office").value);
+    }
+    function markChip(root, id) {
+      Array.prototype.forEach.call(root.querySelectorAll(".chip"), function (el) {
+        el.setAttribute("aria-checked", el.dataset.id === id ? "true" : "false");
+      });
+    }
+    function renderChips(root, items, onPick) {
+      root.innerHTML = "";
+      items.forEach(function (item) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "chip";
+        btn.setAttribute("role", "radio");
+        btn.setAttribute("aria-checked", "false");
+        btn.dataset.id = item.id;
+        btn.textContent = item.label;
+        btn.addEventListener("click", function () { onPick(item, root); });
+        root.appendChild(btn);
+      });
+    }
+    function selectFriction(item, which) {
+      state.friction = item.id;
+      state.friction_label = item.label;
+      const wrap = $(which === "open" ? "open-friction-other-wrap" : "guided-friction-other-wrap");
+      if (wrap) wrap.hidden = item.id !== "other";
+      const root = $(which === "open" ? "open-friction" : "guided-friction");
+      if (root) markChip(root, item.id);
+    }
+    function selectHeat(n, which) {
+      state.heat = String(n);
+      const root = $("open-heat");
+      if (!root) return;
+      Array.prototype.forEach.call(root.querySelectorAll("button"), function (el) {
+        el.setAttribute("aria-checked", el.dataset.heat === String(n) ? "true" : "false");
+      });
+      $("open-heat-caption").textContent = HEAT[n];
+    }
+    function buildHeat(root, which) {
+      root.innerHTML = "";
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.setAttribute("role", "radio");
+        btn.setAttribute("aria-checked", "false");
+        btn.dataset.heat = String(i);
+        btn.textContent = String(i);
+        btn.setAttribute("aria-label", i + ". " + HEAT[i]);
+        btn.addEventListener("click", function () { selectHeat(i, which); });
+        root.appendChild(btn);
+      }
+    }
+
+    renderChips($("about-chips"), ABOUT, function (item, root) {
+      state.about = item.id;
+      markChip(root, item.id);
+    });
+    renderChips($("open-friction"), FRICTIONS, function (item) { selectFriction(item, "open"); });
+    const guidedFriction = $("guided-friction");
+    if (guidedFriction) renderChips(guidedFriction, FRICTIONS, function (item) { selectFriction(item, "guided"); });
+    buildHeat($("open-heat"), "open");
+
+    function setStepperValue(id, next) {
+      const input = $(id);
+      if (!input) return;
+      if (next === "" || next == null) {
+        input.value = "";
+        return;
+      }
+      const n = Math.max(0, Math.min(999, parseInt(next, 10)));
+      input.value = String(Number.isFinite(n) ? n : 0);
+    }
+    document.querySelectorAll(".stepper-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const id = btn.getAttribute("data-stepper");
+        const dir = parseInt(btn.getAttribute("data-dir"), 10) || 0;
+        const input = $(id);
+        if (!input) return;
+        const raw = input.value.trim();
+        if (raw === "") {
+          setStepperValue(id, dir > 0 ? 1 : 0);
+        } else {
+          const current = parseInt(raw, 10);
+          const base = Number.isFinite(current) ? current : 0;
+          setStepperValue(id, base + dir);
+        }
+        if (typeof clearKpiErrorFor === "function") clearKpiErrorFor(id);
+      });
+    });
+    ["kpi-ncns", "kpi-placements", "kpi-open-orders"].forEach(function (id) {
+      const input = $(id);
+      if (!input) return;
+      input.addEventListener("input", function () {
+        const raw = input.value.trim();
+        if (raw !== "" && !/^[0-9]+$/.test(raw)) setStepperValue(id, 0);
+        if (typeof clearKpiErrorFor === "function") clearKpiErrorFor(id);
+      });
+    });
+    function markNamedChips(root, attr, value) {
+      if (!root) return;
+      Array.prototype.forEach.call(root.querySelectorAll(".chip"), function (el) {
+        el.setAttribute("aria-checked", el.getAttribute(attr) === value ? "true" : "false");
+      });
+    }
+    const ttfRoot = $("ttf-trend");
+    if (ttfRoot) {
+      ttfRoot.addEventListener("click", function (ev) {
+        const btn = ev.target.closest("[data-ttf]");
+        if (!btn) return;
+        state.ttf_trend = btn.getAttribute("data-ttf") || "";
+        markNamedChips(ttfRoot, "data-ttf", state.ttf_trend);
+        if (typeof clearKpiErrorFor === "function") clearKpiErrorFor("ttf-trend");
+      });
+    }
+    function setShareLearn(value) {
+      state.share_learn = value || "";
+      markNamedChips($("share-learn"), "data-share-learn", state.share_learn);
+      const wrap = $("share-learn-note-wrap");
+      if (wrap) wrap.hidden = state.share_learn !== "yes";
+      if (state.share_learn !== "yes") {
+        const note = $("share-learn-note");
+        if (note) note.value = "";
+      }
+    }
+    const shareRoot = $("share-learn");
+    if (shareRoot) {
+      shareRoot.addEventListener("click", function (ev) {
+        const btn = ev.target.closest("[data-share-learn]");
+        if (!btn) return;
+        setShareLearn(btn.getAttribute("data-share-learn") || "");
+        if (typeof clearKpiErrorFor === "function") clearKpiErrorFor("share-learn");
+        if (state.share_learn === "yes") {
+          const note = $("share-learn-note");
+          if (note) note.focus();
+        }
+      });
+    }
+    if ($("kpi-hardest-role")) {
+      $("kpi-hardest-role").addEventListener("input", function () {
+        if (typeof clearKpiErrorFor === "function") clearKpiErrorFor("kpi-hardest-role");
+      });
+    }
+    if ($("share-learn-note")) {
+      $("share-learn-note").addEventListener("input", function () {
+        if (typeof clearKpiErrorFor === "function") clearKpiErrorFor("share-learn-note");
+      });
+    }
+
+    document.querySelectorAll("[data-consent]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.consent = btn.dataset.consent;
+        const scope = btn.dataset.scope;
+        document.querySelectorAll("[data-consent][data-scope=\"" + scope + "\"]").forEach(function (el) {
+          el.setAttribute("aria-checked", el === btn ? "true" : "false");
+        });
+      });
+    });
+
+    const sparkStart = (iso.week - 1) % QUESTIONS.length;
+    const sparkRoot = $("sparks");
+    for (let i = 0; i < 5; i++) {
+      const q = QUESTIONS.find(function (item) { return item.id === ROTATION[(sparkStart + i) % ROTATION.length]; });
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "chip";
+      btn.textContent = q.tag;
+      btn.title = q.prompt;
+      btn.addEventListener("click", function () {
+        state.spark_id = q.id;
+        const box = $("story");
+        const starter = q.prompt + "\n\n";
+        if (!box.value.trim()) box.value = starter;
+        else if (box.value.indexOf(q.prompt) === -1) box.value = box.value.replace(/\s*$/, "\n\n") + starter;
+        box.focus();
+        Array.prototype.forEach.call(sparkRoot.querySelectorAll(".chip"), function (el) {
+          el.classList.toggle("active", el === btn);
+        });
+      });
+      sparkRoot.appendChild(btn);
+    }
+
+    const REACTIONS = [
+      { id: "seeing more", label: "Seeing more" },
+      { id: "about the same", label: "About the same" },
+      { id: "seeing less", label: "Seeing less" },
+      { id: "not my area", label: "Not my area" }
+    ];
+    state.tp = {};
+    function renderTalkingPoints() {
+      const root = $("talking-points");
+      if (!root) return;
+      root.innerHTML = "";
+      const weekLabel = $("tp-week-label");
+      if (weekLabel) weekLabel.textContent = (WEEK_CONFIG && WEEK_CONFIG.week_label) ? WEEK_CONFIG.week_label : "";
+      const points = (WEEK_CONFIG && WEEK_CONFIG.talking_points) || [];
+      points.forEach(function (tp) {
+        state.tp[tp.id] = state.tp[tp.id] || { reaction: "", why: "" };
+        const card = document.createElement("div");
+        card.className = "tp-card";
+        const prompt = document.createElement("p");
+        prompt.className = "tp-prompt";
+        prompt.textContent = tp.prompt;
+        const stat = document.createElement("p");
+        stat.className = "tp-stat";
+        stat.textContent = tp.stat || "";
+        const src = document.createElement("p");
+        src.className = "tp-source";
+        const a = document.createElement("a");
+        a.href = tp.source_url || "#";
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = tp.source_label || "Source";
+        src.appendChild(a);
+        const chips = document.createElement("div");
+        chips.className = "chips";
+        chips.setAttribute("role", "radiogroup");
+        chips.setAttribute("aria-label", "Your take on this talking point");
+        REACTIONS.forEach(function (r) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "chip";
+          btn.setAttribute("role", "radio");
+          btn.setAttribute("aria-checked", "false");
+          btn.dataset.reaction = r.id;
+          btn.textContent = r.label;
+          btn.addEventListener("click", function () {
+            state.tp[tp.id].reaction = r.id;
+            Array.prototype.forEach.call(chips.querySelectorAll(".chip"), function (el) {
+              el.setAttribute("aria-checked", el.dataset.reaction === r.id ? "true" : "false");
+            });
+          });
+          chips.appendChild(btn);
+        });
+        const whyLabel = document.createElement("label");
+        whyLabel.className = "field";
+        whyLabel.setAttribute("for", tp.id + "-why");
+        whyLabel.textContent = "Why? (optional)";
+        const why = document.createElement("input");
+        why.id = tp.id + "-why";
+        why.type = "text";
+        why.maxLength = 160;
+        why.placeholder = "What are you seeing locally?";
+        why.autocomplete = "off";
+        why.addEventListener("input", function () { state.tp[tp.id].why = why.value.trim(); });
+        card.appendChild(prompt);
+        if (tp.stat) card.appendChild(stat);
+        card.appendChild(src);
+        card.appendChild(chips);
+        card.appendChild(whyLabel);
+        card.appendChild(why);
+        root.appendChild(card);
+      });
+    }
+    renderTalkingPoints();
+
+    function showView(name) {
+      ["choose", "write", "thanks"].forEach(function (id) {
+        $("view-" + id).classList.toggle("active", id === name);
+      });
+      $("identity-block").hidden = name === "thanks";
+      const heading = document.querySelector("#view-" + name + " h1");
+      if (heading && !params.get("shot")) {
+        heading.setAttribute("tabindex", "-1");
+        heading.focus();
+      }
+    }
+    function openMode(mode) {
+      if (!identityReady()) { toast("Add your first name and office first."); return; }
+      if (mode !== "guided" && mode !== "scenario") mode = "open";
+      state.mode = mode;
+      $("open-form").hidden = state.mode !== "open";
+      $("guided-form").hidden = state.mode !== "guided";
+      $("scenario-form").hidden = state.mode !== "scenario";
+      $("write-eyebrow").textContent = state.mode === "open" ? "Open note" : (state.mode === "guided" ? "Guided" : "Scenario");
+      $("write-title").textContent = state.mode === "open" ? "What happened this week?" : (state.mode === "guided" ? "What's happening in your market?" : "Describe a scenario from this week");
+      $("switch-mode").textContent = "Choose a different mode";
+      showView("write");
+    }
+
+    $("pick-open").addEventListener("click", function () { openMode("open"); });
+    $("pick-guided").addEventListener("click", function () { openMode("guided"); });
+    $("pick-scenario").addEventListener("click", function () { openMode("scenario"); });
+    $("switch-mode").addEventListener("click", function () { showView("choose"); });
+
+    function winStory() {
+      if (state.mode === "open") return $("open-win-story").value.trim();
+      return "";
+    }
+    function frictionOther() {
+      if (state.mode !== "open") return "";
+      return $("open-friction-other").value.trim();
+    }
+    function kpiNumber(id) {
+      const el = $(id);
+      if (!el) return "";
+      const raw = el.value.trim();
+      if (raw === "") return "";
+      if (!/^[0-9]+$/.test(raw)) return "";
+      return String(parseInt(raw, 10));
+    }
+
+    function buildPayload() {
+      const stamp = chicagoStamp(new Date());
+      const skip = state.type === "nothing-this-week";
+      const open = state.mode === "open";
+      const guided = state.mode === "guided";
+      const scenario = state.mode === "scenario";
+      const spark = QUESTIONS.find(function (q) { return q.id === state.spark_id; });
+      const storyWin = winStory();
+      const scenarioText = skip || !scenario ? "" : $("scenario").value.trim();
+      const payload = {
+        schema: "recruiter-signal-v1",
+        type: skip ? "nothing-this-week" : "weekly-pulse",
+        mode: skip ? "" : state.mode,
+        iso_week: isoWeekId,
+        submitted_at: stamp,
+        name: firstName($("name").value),
+        office: $("office").value,
+        email: ($("recipient-email") && $("recipient-email").value) ? $("recipient-email").value : "",
+        story: skip ? "" : (open ? $("story").value.trim() : scenarioText),
+        scenario: scenarioText,
+        about: skip || !open ? "" : state.about,
+        spark_id: skip || !open ? "" : (state.spark_id || ""),
+        spark_prompt: skip || !open || !spark ? "" : spark.prompt,
+        role_family: "",
+        role_other: "",
+        friction: skip || !open ? "" : state.friction,
+        friction_label: skip || !open ? "" : (state.friction === "other" ? frictionOther() : state.friction_label),
+        friction_other: skip || !open ? "" : frictionOther(),
+        heat: skip || !open ? "" : state.heat,
+        talking_points_week: skip || !guided ? "" : ((WEEK_CONFIG && WEEK_CONFIG.week) || isoWeekId),
+        ncns_count: skip || !guided ? "" : kpiNumber("kpi-ncns"),
+        placements_count: skip || !guided ? "" : kpiNumber("kpi-placements"),
+        open_orders_hard: skip || !guided ? "" : kpiNumber("kpi-open-orders"),
+        hardest_role: skip || !guided ? "" : ($("kpi-hardest-role") ? $("kpi-hardest-role").value.trim() : ""),
+        ttf_trend: skip || !guided ? "" : state.ttf_trend,
+        share_learn: skip || !guided ? "" : state.share_learn,
+        share_learn_note: skip || !guided || state.share_learn !== "yes" ? "" : ($("share-learn-note") ? $("share-learn-note").value.trim() : ""),
+        placement_win: skip || !open ? "" : (storyWin ? "yes" : "no"),
+        placement_story: skip || !open ? "" : storyWin,
+        consent: skip || !open ? "" : (storyWin ? state.consent : "")
+      };
+      if (!skip && guided) {
+        const points = (WEEK_CONFIG && WEEK_CONFIG.talking_points) || [];
+        points.forEach(function (tp) {
+          const rec = state.tp[tp.id] || {};
+          const whyEl = $(tp.id + "-why");
+          const why = rec.why || (whyEl ? whyEl.value.trim() : "");
+          const reaction = rec.reaction || "";
+          payload[tp.id] = reaction ? (reaction + " | " + why) : "";
+        });
+      }
+      return payload;
+    }
+    function formatBody(payload) {
+      const keys = [
+        "schema","type","mode","iso_week","submitted_at","name","office","email",
+        "story","scenario","about","spark_id","spark_prompt",
+        "role_family","role_other","friction","friction_label","friction_other","heat",
+        "talking_points_week",
+        "ncns_count","placements_count","open_orders_hard","hardest_role","ttf_trend",
+        "share_learn","share_learn_note",
+        "placement_win","placement_story","consent"
+      ];
+      const tpKeys = Object.keys(payload).filter(function (k) { return /^tp\d+$/.test(k); }).sort();
+      const at = keys.indexOf("talking_points_week") + 1;
+      keys.splice.apply(keys, [at, 0].concat(tpKeys));
+      return keys.map(function (k) {
+        return k + ": " + String(payload[k] == null ? "" : payload[k]).replace(/\r?\n/g, "\\n");
+      }).join("\n");
+    }
+    function subjectLine(payload) { return "Recruiter Signal - " + payload.name + " - " + payload.iso_week; }
+    function mailtoUrl(payload) {
+      const addr = (CONFIG.fallbackMailto || "mailto:brett@barrandcompany.co").replace(/^mailto:/i, "");
+      return "mailto:" + addr + "?subject=" + encodeURIComponent(subjectLine(payload)) + "&body=" + encodeURIComponent(formatBody(payload));
+    }
+    async function copyText(text) {
+      try { await navigator.clipboard.writeText(text); return true; }
+      catch (e) {
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          const ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          return ok;
+        } catch (err) { return false; }
+      }
+    }
+    function numberAnswered(value) {
+      return value === "0" || !!value;
+    }
+    const KPI_FIELDS = [
+      { key: "ncns_count", item: "ncns_count", focus: "kpi-ncns", error: "err-kpi-ncns", message: "Enter a number. 0 is fine if you had none." },
+      { key: "placements_count", item: "placements_count", focus: "kpi-placements", error: "err-kpi-placements", message: "Enter a number. 0 is fine if you had none." },
+      { key: "open_orders_hard", item: "open_orders_hard", focus: "kpi-open-orders", error: "err-kpi-open-orders", message: "Enter a number. 0 is fine if you had none." },
+      { key: "hardest_role", item: "hardest_role", focus: "kpi-hardest-role", error: "err-kpi-hardest-role", message: "Add the hardest role to fill this week." },
+      { key: "ttf_trend", item: "ttf_trend", focus: "ttf-trend", error: "err-kpi-ttf", message: "Choose faster, same, or slower." },
+      { key: "share_learn", item: "share_learn", focus: "share-learn", error: "err-kpi-share-learn", message: "Choose yes or no." },
+      { key: "share_learn_note", item: "share_learn", focus: "share-learn-note", error: "err-kpi-share-learn-note", message: "Add a short note about what you tried or learned.", onlyIfYes: true }
+    ];
+    function kpiGaps(payload) {
+      const gaps = [];
+      KPI_FIELDS.forEach(function (field) {
+        if (field.onlyIfYes) {
+          if (payload.share_learn === "yes" && !payload.share_learn_note) gaps.push(field);
+          return;
+        }
+        if (field.key === "ncns_count" || field.key === "placements_count" || field.key === "open_orders_hard") {
+          if (!numberAnswered(payload[field.key])) gaps.push(field);
+          return;
+        }
+        if (!payload[field.key]) gaps.push(field);
+      });
+      return gaps;
+    }
+    function clearKpiErrors() {
+      document.querySelectorAll(".kpi-item.is-error").forEach(function (item) {
+        item.classList.remove("is-error");
+      });
+      document.querySelectorAll(".kpi-error").forEach(function (el) {
+        el.hidden = true;
+      });
+      ["kpi-ncns", "kpi-placements", "kpi-open-orders", "kpi-hardest-role", "share-learn-note", "ttf-trend", "share-learn"].forEach(function (id) {
+        const el = $(id);
+        if (el) el.removeAttribute("aria-invalid");
+      });
+    }
+    function clearKpiErrorFor(targetId) {
+      const field = KPI_FIELDS.filter(function (item) { return item.focus === targetId; })[0];
+      if (!field) return;
+      const err = $(field.error);
+      if (err) err.hidden = true;
+      const item = document.querySelector('.kpi-item[data-kpi="' + field.item + '"]');
+      if (item) {
+        const stillOpen = Array.prototype.some.call(item.querySelectorAll(".kpi-error"), function (el) { return !el.hidden; });
+        if (!stillOpen) item.classList.remove("is-error");
+      }
+      const el = $(field.focus);
+      if (el) el.removeAttribute("aria-invalid");
+    }
+    function showKpiErrors(gaps) {
+      clearKpiErrors();
+      if (!gaps.length) return;
+      gaps.forEach(function (field) {
+        const item = document.querySelector('.kpi-item[data-kpi="' + field.item + '"]');
+        if (item) item.classList.add("is-error");
+        const err = $(field.error);
+        if (err) {
+          err.textContent = field.message;
+          err.hidden = false;
+        }
+        const el = $(field.focus);
+        if (el) el.setAttribute("aria-invalid", "true");
+      });
+      const first = gaps[0];
+      const focusEl = $(first.focus);
+      const item = document.querySelector('.kpi-item[data-kpi="' + first.item + '"]');
+      const scrollEl = item || focusEl;
+      if (scrollEl && scrollEl.scrollIntoView) scrollEl.scrollIntoView({ block: "center", behavior: "smooth" });
+      if (focusEl && focusEl.focus) {
+        try { focusEl.focus(); } catch (err) {}
+      }
+    }
+    function canSend(payload) {
+      if (payload.type === "nothing-this-week") return true;
+      if (payload.mode === "open") return !!(payload.story || payload.placement_story);
+      if (payload.mode === "scenario") return !!(payload.scenario || payload.story);
+      return kpiGaps(payload).length === 0;
+    }
+    function hideSendError() {
+      const box = $("send-error");
+      if (box) box.hidden = true;
+    }
+    function showSendError(payload, message) {
+      const box = $("send-error");
+      const text = $("send-error-text");
+      const link = $("mailto-fallback");
+      if (text) text.textContent = message || "We couldn’t send that just now. Your note is still here.";
+      if (link) link.href = mailtoUrl(payload);
+      if (box) {
+        box.hidden = false;
+        if (box.scrollIntoView) box.scrollIntoView({ block: "nearest" });
+      }
+    }
+    function setSending(on) {
+      ["send-btn", "try-again-btn", "copy-btn", "nothing-new", "nothing-new-2"].forEach(function (id) {
+        const el = $(id);
+        if (el) el.disabled = !!on;
+      });
+      const btn = $("send-btn");
+      if (btn) btn.textContent = on ? "Sending…" : "Send";
+    }
+    function currentChicagoMonth() {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/Chicago",
+        year: "numeric",
+        month: "2-digit"
+      }).formatToParts(new Date());
+      const year = parts.find(function (item) { return item.type === "year"; }).value;
+      const month = parts.find(function (item) { return item.type === "month"; }).value;
+      return year + "-" + month;
+    }
+    async function readLimit() {
+      try {
+        const res = await fetch("../limit.json?ts=" + Date.now(), { cache: "no-store" });
+        if (!res.ok) return null;
+        return await res.json();
+      } catch (err) {
+        return null;
+      }
+    }
+    function limitBlocksSend(info) {
+      return !!(info && info.capped === true && String(info.month) === currentChicagoMonth());
+    }
+    function looksLikeQuotaError(err) {
+      const text = String((err && err.message) || err || "").toLowerCase();
+      return /monthly submission limit|submission limit|quota|over the limit|exceeded your (monthly )?limit|limit reached|cap limit/.test(text);
+    }
+    function showCapModal() {
+      const modal = $("cap-modal");
+      if (!modal) return;
+      modal.hidden = false;
+      const closer = $("cap-modal-close");
+      if (closer) closer.focus();
+    }
+    function hideCapModal() {
+      const modal = $("cap-modal");
+      if (modal) modal.hidden = true;
+    }
+    async function postToWeb3Forms(payload) {
+      const res = await fetch(CONFIG.submitUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          access_key: CONFIG.accessKey,
+          subject: subjectLine(payload),
+          from_name: CONFIG.fromName,
+          message: formatBody(payload),
+          name: payload.name || "",
+          office: payload.office || "",
+          email: payload.email || "",
+          recipient_email: payload.email || "",
+          mode: payload.mode || "",
+          week: payload.iso_week || "",
+          botcheck: false
+        })
+      });
+      let json = null;
+      try { json = await res.json(); } catch (err) { json = null; }
+      if (!json || json.success !== true) {
+        const detail = (json && (
+          json.message ||
+          (json.body && json.body.message) ||
+          (json.error && json.error.message)
+        )) || ("HTTP " + res.status);
+        throw new Error(detail);
+      }
+    }
+    async function submitSignal(via) {
+      if (!identityReady()) { toast("Add your first name and office first."); return; }
+      const payload = buildPayload();
+      if (!canSend(payload)) {
+        if (payload.mode === "open") toast("Write a note about this week.");
+        else if (payload.mode === "scenario") toast("Describe a scenario from this week.");
+        else {
+          const gaps = kpiGaps(payload);
+          showKpiErrors(gaps);
+          toast(gaps[0] ? gaps[0].message : "Answer this week’s numbers first.");
+        }
+        return;
+      }
+      clearKpiErrors();
+      const body = formatBody(payload);
+      if (via !== "copy") {
+        if (honeypotFilled()) {
+          finishThanks();
+          return;
+        }
+        if (windowClosed()) {
+          showClosed();
+          return;
+        }
+      }
+      if (via === "copy") {
+        const ok = await copyText(body);
+        toast(ok ? "Copied." : "Could not copy automatically.");
+        if (!$("view-thanks").classList.contains("active")) return;
+        finishThanks();
+        return;
+      }
+      hideSendError();
+      hideCapModal();
+      setSending(true);
+      try {
+        const info = await readLimit();
+        if (limitBlocksSend(info)) {
+          showCapModal();
+          return;
+        }
+        await postToWeb3Forms(payload);
+        finishThanks();
+      } catch (err) {
+        if (looksLikeQuotaError(err)) {
+          showCapModal();
+        } else {
+          showSendError(payload, "We couldn’t send that just now. Your note is still here.");
+          toast("Send failed. You can try again or send by email instead.");
+        }
+      } finally {
+        setSending(false);
+      }
+    }
+    function finishThanks() {
+      hideSendError();
+      hideCapModal();
+      showView("thanks");
+    }
+    function nothingNew() {
+      if (!identityReady()) { toast("Add your first name and office first."); return; }
+      state.type = "nothing-this-week";
+      submitSignal("send");
+    }
+
+    $("nothing-new").addEventListener("click", nothingNew);
+    $("nothing-new-2").addEventListener("click", nothingNew);
+    $("send-btn").addEventListener("click", function () { state.type = "weekly-pulse"; submitSignal("send"); });
+    $("try-again-btn").addEventListener("click", function () { submitSignal("send"); });
+    $("cap-modal-close").addEventListener("click", hideCapModal);
+    document.addEventListener("keydown", function (ev) {
+      if (ev.key === "Escape") hideCapModal();
+    });
+    $("copy-btn").addEventListener("click", function () { state.type = "weekly-pulse"; submitSignal("copy"); });
+    $("copy-again").addEventListener("click", function () { submitSignal("copy"); });
+    $("start-over").addEventListener("click", function () { window.location = window.location.pathname; });
+
+    function bindDictation(btn, box, live, hint) {
+      const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!Speech || !btn || !box) {
+        if (btn) btn.hidden = true;
+        if (hint) hint.hidden = false;
+        return;
+      }
+      btn.hidden = false;
+      if (hint) hint.hidden = true;
+      let rec = null;
+      let base = "";
+      function label() { return btn.querySelector(".mic-label") || btn; }
+      function stopRec() {
+        if (rec) {
+          try { rec.stop(); } catch (err) {}
+          rec = null;
+        }
+        btn.classList.remove("listening");
+        btn.setAttribute("aria-pressed", "false");
+        label().textContent = "Start dictation";
+        if (live) live.textContent = "";
+      }
+      btn.addEventListener("click", function () {
+        if (rec) { stopRec(); return; }
+        rec = new Speech();
+        rec.lang = "en-US";
+        rec.continuous = true;
+        rec.interimResults = true;
+        base = box.value || "";
+        rec.onresult = function (ev) {
+          let interim = "";
+          let finals = "";
+          for (let i = ev.resultIndex; i < ev.results.length; i++) {
+            const said = ev.results[i][0].transcript;
+            if (ev.results[i].isFinal) finals += said;
+            else interim += said;
+          }
+          if (finals) {
+            const needsSpace = base && !/\s$/.test(base) && !/^\s/.test(finals);
+            base = base + (needsSpace ? " " : "") + finals;
+            box.value = base;
+          }
+          const gap = (interim && base && !/\s$/.test(base)) ? " " : "";
+          box.value = base + (interim ? gap + interim : "");
+          if (live) live.textContent = interim ? ("Listening: " + interim) : "";
+        };
+        rec.onerror = function () {
+          toast("Could not hear that. You can type, or use the microphone on your keyboard.");
+          stopRec();
+        };
+        rec.onend = function () {
+          if (rec) {
+            try { rec.start(); } catch (err) { stopRec(); }
+          }
+        };
+        try {
+          rec.start();
+          btn.classList.add("listening");
+          btn.setAttribute("aria-pressed", "true");
+          label().textContent = "Stop dictation";
+          toast("Listening… tap the button when you are done.");
+        } catch (err) {
+          toast("Dictation could not start. Try typing, or use the microphone on your keyboard.");
+          stopRec();
+        }
+      });
+    }
+    bindDictation($("dictate-story"), $("story"), null, null);
+    bindDictation($("dictate-scenario"), $("scenario"), $("scenario-interim"), $("scenario-mic-hint"));
+
+    const GREET_KEY = "sedonaGreetingPlayed";
+    const HELLOS = ["Hi", "Hey", "What's up"];
+    function prefersReducedMotion() {
+      return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+    function greetingAlreadyPlayed() {
+      try { return sessionStorage.getItem(GREET_KEY) === "1"; } catch (err) { return false; }
+    }
+    function markGreetingPlayed() {
+      try { sessionStorage.setItem(GREET_KEY, "1"); } catch (err) {}
+    }
+    function pickHello(email) {
+      if (!email) return "Hey";
+      let hash = 0;
+      for (let i = 0; i < email.length; i++) hash = (hash * 31 + email.charCodeAt(i)) >>> 0;
+      return HELLOS[hash % HELLOS.length];
+    }
+    function setGreetingText(email) {
+      const el = $("greeting-text");
+      if (!el) return;
+      el.textContent = "";
+      const line = document.createElement("span");
+      if (!email) {
+        line.textContent = "Hey there";
+        el.appendChild(line);
+        return;
+      }
+      const hello = pickHello(email);
+      const prefix = hello === "What's up" ? "What's up," : hello;
+      line.appendChild(document.createTextNode(prefix));
+      const em = document.createElement("span");
+      em.className = "greeting-email";
+      em.textContent = email;
+      line.appendChild(em);
+      el.appendChild(line);
+    }
+    let greetingClosed = false;
+    let greetingTimer = 0;
+    function dismissGreeting() {
+      const root = document.documentElement;
+      if (greetingClosed || !root.classList.contains("is-greeting")) {
+        root.classList.remove("is-greeting", "is-greeting-out", "is-greeting-mid");
+        return;
+      }
+      greetingClosed = true;
+      if (greetingTimer) { clearTimeout(greetingTimer); greetingTimer = 0; }
+      const overlay = $("greeting-overlay");
+      const reduced = prefersReducedMotion();
+      function done() {
+        root.classList.remove("is-greeting", "is-greeting-out", "is-greeting-mid");
+        if (overlay) overlay.setAttribute("aria-hidden", "true");
+        markGreetingPlayed();
+      }
+      root.classList.add("is-greeting-out");
+      setTimeout(done, reduced ? 220 : 700);
+    }
+    function startGreeting() {
+      const shotName = params.get("shot") || "";
+      const force = shotName.indexOf("greeting") === 0 || params.get("greet") === "1";
+      const email = sanitizeEmail(params.get("u"));
+      if (shotName && shotName.indexOf("greeting") !== 0) {
+        document.documentElement.classList.remove("is-greeting", "is-greeting-out", "is-greeting-mid");
+        return;
+      }
+      if (!force && greetingAlreadyPlayed()) {
+        document.documentElement.classList.remove("is-greeting", "is-greeting-out", "is-greeting-mid");
+        return;
+      }
+      setGreetingText(email);
+      document.documentElement.classList.add("is-greeting");
+      const overlay = $("greeting-overlay");
+      if (overlay) {
+        overlay.setAttribute("aria-hidden", "false");
+        overlay.addEventListener("click", function (ev) {
+          ev.preventDefault();
+          dismissGreeting();
+        });
+      }
+      document.addEventListener("keydown", function onKey(ev) {
+        if (ev.key === "Escape" || ev.key === "Enter" || ev.key === " ") {
+          ev.preventDefault();
+          document.removeEventListener("keydown", onKey);
+          dismissGreeting();
+        }
+      });
+      if (shotName === "greeting" || shotName === "greeting-generic") return;
+      if (shotName === "greeting-mid") {
+        document.documentElement.classList.add("is-greeting-mid");
+        return;
+      }
+      const hold = prefersReducedMotion() ? 900 : 2200;
+      greetingTimer = setTimeout(function () { dismissGreeting(); }, hold);
+    }
+    startGreeting();
+
+    const OPEN_DEMO = "A warehouse order sat another week because the starting pay is below what people can get at plants nearby. Two good pickers took other work while the hiring manager thought it over.";
+    const shot = params.get("shot");
+    if (shot) {
+      if (shot !== "choose" && String(shot).indexOf("greeting") !== 0) {
+        $("name").value = "Jordan";
+        $("office").value = "Clinton, IA";
+      }
+      if (shot === "choose") {
+        showView("choose");
+      } else if (shot === "open") {
+        openMode("open");
+        $("story").value = OPEN_DEMO;
+      } else if (shot === "guided" || shot === "kpi" || shot === "kpi-yes" || shot === "kpi-error") {
+        openMode("guided");
+        [
+          { id: "tp1", reaction: "seeing more", why: "More warehouse orders this week than last month." },
+          { id: "tp2", reaction: "seeing more", why: "People keep asking for full-time hours." },
+          { id: "tp3", reaction: "seeing more", why: "Seasonal pickers are the request of the week." },
+          { id: "tp4", reaction: "about the same", why: "Clients are still sitting on people we send." },
+          { id: "tp5", reaction: "about the same", why: "" }
+        ].forEach(function (item) {
+          if (!state.tp[item.id]) return;
+          state.tp[item.id].reaction = item.reaction;
+          state.tp[item.id].why = item.why;
+          const whyEl = $(item.id + "-why");
+          if (whyEl) whyEl.value = item.why;
+          const chips = whyEl && whyEl.parentNode.querySelector(".chips");
+          if (chips) {
+            Array.prototype.forEach.call(chips.querySelectorAll(".chip"), function (el) {
+              el.setAttribute("aria-checked", el.dataset.reaction === item.reaction ? "true" : "false");
+            });
+          }
+        });
+        if (shot !== "kpi-error") {
+          setStepperValue("kpi-ncns", 3);
+          setStepperValue("kpi-placements", 2);
+          setStepperValue("kpi-open-orders", 4);
+          if ($("kpi-hardest-role")) $("kpi-hardest-role").value = "2nd shift machine operator";
+          state.ttf_trend = "slower";
+          markNamedChips($("ttf-trend"), "data-ttf", "slower");
+          if (shot === "kpi-yes") {
+            setShareLearn("yes");
+            if ($("share-learn-note")) $("share-learn-note").value = "I started a same-day text if someone was 15 minutes late. Two people still made their shift who would have been no-shows last month.";
+          } else {
+            setShareLearn("no");
+          }
+        } else {
+          setStepperValue("kpi-ncns", "");
+          setStepperValue("kpi-placements", 2);
+          setStepperValue("kpi-open-orders", 4);
+          if ($("kpi-hardest-role")) $("kpi-hardest-role").value = "2nd shift machine operator";
+          state.ttf_trend = "slower";
+          markNamedChips($("ttf-trend"), "data-ttf", "slower");
+          setShareLearn("no");
+          showKpiErrors(kpiGaps(buildPayload()));
+        }
+        if (shot === "kpi" || shot === "kpi-yes" || shot === "kpi-error") {
+          document.documentElement.classList.add("shot-kpi");
+          if (document.body) document.body.scrollTop = 0;
+          if (document.documentElement) document.documentElement.scrollTop = 0;
+        }
+      } else if (shot === "scenario") {
+        openMode("scenario");
+        $("scenario").value = "Tuesday morning at a packing line in Clinton, a new temp I'll call Maya showed up for her first shift ten minutes early, then almost left during orientation. The supervisor went through the safety video and the badge process so fast that Maya told me she didn't know who to call if she was going to be late, and she started looking up the bus times to go home.";
+        const mic = $("dictate-scenario");
+        const hint = $("scenario-mic-hint");
+        if (mic) { mic.hidden = false; }
+        if (hint) hint.hidden = true;
+      } else if (shot === "thanks") {
+        $("story").value = OPEN_DEMO;
+        finishThanks();
+      }
+    }
+  })();
+  </script>
+</body>
+</html>
